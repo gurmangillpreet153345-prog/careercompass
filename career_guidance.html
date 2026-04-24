@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareerCompass — Find Your Path</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --surface2: #1a2235;
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.14);
+      --accent: #4f8ef7;
+      --accent2: #a78bfa;
+      --accent3: #34d399;
+      --accent4: #fb923c;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --muted2: #475569;
+      --glow: rgba(79,142,247,0.15);
+      --glow2: rgba(167,139,250,0.12);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79,142,247,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,142,247,0.025) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10,14,26,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-dot {
+      color: var(--accent3);
+      -webkit-text-fill-color: var(--accent3);
+    }
+
+    .header-badge {
+      background: linear-gradient(135deg, rgba(79,142,247,0.12), rgba(167,139,250,0.12));
+      border: 1px solid rgba(79,142,247,0.25);
+      color: var(--accent);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      position: sticky;
+      top: 57px;
+      z-index: 99;
+      height: 3px;
+      background: rgba(79,142,247,0.1);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      transition: width 0.55s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── SCREEN ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 64px 20px 44px;
+      max-width: 640px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(52,211,153,0.08);
+      border: 1px solid rgba(52,211,153,0.22);
+      color: var(--accent3);
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 22px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(30px, 5.5vw, 52px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 .line1 { color: var(--text); }
+
+    .hero h1 .line2 {
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.75;
+    }
+
+    /* ── STEP TRACKER ── */
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      max-width: 520px;
+      margin: 32px auto 44px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      width: 100%;
+      height: 1px;
+      background: var(--border2);
+      z-index: 0;
+      transition: background 0.4s;
+    }
+
+    .step.done:not(:last-child)::after {
+      background: linear-gradient(90deg, var(--accent3), var(--accent));
+    }
+
+    .step-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      border: 2px solid var(--border2);
+      background: var(--surface);
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s ease;
+    }
+
+    .step.active .step-dot {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(79,142,247,0.18), rgba(167,139,250,0.18));
+      color: var(--accent);
+      box-shadow: 0 0 20px rgba(79,142,247,0.25);
+    }
+
+    .step.done .step-dot {
+      border-color: var(--accent3);
+      background: rgba(52,211,153,0.12);
+      color: var(--accent3);
+    }
+
+    .step-label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    .step.active .step-label { color: var(--accent); }
+    .step.done .step-label { color: var(--accent3); }
+
+    /* ── MAIN CONTAINER ── */
+    .main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 22px;
+      animation: fadeUp 0.38s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 2px;
+    }
+
+    .card-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── FORM ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media(max-width: 580px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .card { padding: 22px 18px; }
+      header { padding: 14px 18px; }
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      margin-bottom: 7px;
+    }
+
+    select, input[type="text"], textarea {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 15px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79,142,247,0.1);
+      background: var(--surface);
+    }
+
+    select option, select optgroup { background: #1a2235; color: var(--text); }
+    textarea { resize: vertical; min-height: 90px; }
+
+    /* ── CHIPS ── */
+    .chip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 9px;
+    }
+
+    .chip {
+      padding: 10px 13px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-align: center;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .chip:hover {
+      border-color: rgba(79,142,247,0.4);
+      color: var(--text);
+      background: rgba(79,142,247,0.05);
+    }
+
+    .chip.selected {
+      border-color: var(--accent);
+      background: rgba(79,142,247,0.1);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .chip.hi { border-color: rgba(167,139,250,0.3); color: var(--accent2); }
+    .chip.hi.selected {
+      border-color: var(--accent2);
+      background: rgba(167,139,250,0.1);
+      color: var(--accent2);
+    }
+
+    /* ── STREAM CARDS ── */
+    .stream-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 12px;
+    }
+
+    .stream-card {
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 16px;
+      cursor: pointer;
+      transition: all 0.22s;
+      text-align: center;
+    }
+
+    .stream-card:hover {
+      border-color: rgba(79,142,247,0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
+    .stream-card.picked {
+      border-color: var(--accent2);
+      background: rgba(167,139,250,0.07);
+      box-shadow: 0 0 0 2px rgba(167,139,250,0.15);
+    }
+
+    .stream-card .si { font-size: 30px; margin-bottom: 10px; }
+    .stream-card .sn { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+    .stream-card .ss { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: 12px;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+      border: none;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(79,142,247,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(79,142,247,0.4);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border2);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      padding-top: 24px;
+      margin-top: 8px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    /* ── HINTS / BANNERS ── */
+    .hint {
+      padding: 11px 15px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 12px;
+      border: 1px solid;
+    }
+
+    .hint-blue { background: rgba(79,142,247,0.07); border-color: rgba(79,142,247,0.2); color: var(--accent); }
+    .hint-green { background: rgba(52,211,153,0.07); border-color: rgba(52,211,153,0.2); color: var(--accent3); }
+    .hint-orange { background: rgba(251,146,60,0.07); border-color: rgba(251,146,60,0.2); color: var(--accent4); }
+    .hint-purple { background: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.2); color: var(--accent2); }
+
+    .banner {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: none;
+      border: 1px solid;
+    }
+    .banner.sci { background: rgba(79,142,247,0.07); border-color: rgba(79,142,247,0.2); color: var(--accent); }
+    .banner.bio { background: rgba(52,211,153,0.07); border-color: rgba(52,211,153,0.2); color: var(--accent3); }
+    .banner.com { background: rgba(251,146,60,0.07); border-color: rgba(251,146,60,0.2); color: var(--accent4); }
+    .banner.arts { background: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.2); color: var(--accent2); }
+    .banner.gen { background: var(--surface2); border-color: var(--border2); color: var(--muted); }
+
+    /* ── TRACK / CAREER CARDS ── */
+    .track {
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 12px;
+      background: var(--surface2);
+      animation: fadeUp 0.25s ease both;
+    }
+
+    .track-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .track-ico {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+      background: rgba(79,142,247,0.1);
+    }
+
+    .track-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+    .track-sal { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--accent3); }
+
+    .track-jobs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+
+    .track-job {
+      background: rgba(79,142,247,0.1);
+      border: 1px solid rgba(79,142,247,0.2);
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .track-path { display: flex; flex-wrap: wrap; align-items: center; gap: 3px; }
+    .track-step { font-size: 11px; color: var(--muted); }
+    .track-arr { font-size: 10px; color: var(--muted2); }
+    .track-end { font-size: 11px; color: var(--accent4); font-weight: 700; }
+
+    /* ── TABS ── */
+    .ttab {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border2);
+      background: var(--surface2);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+
+    .ttab:hover { border-color: var(--accent); color: var(--accent); }
+    .ttab.active { border-color: var(--accent); background: rgba(79,142,247,0.1); color: var(--accent); }
+
+    .tpanel { display: none; }
+    .tpanel.active { display: block; animation: fadeUp 0.25s ease both; }
+
+    /* ── ROADMAP ── */
+    .roadmap {
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .roadmap::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2), var(--accent3));
+    }
+
+    .rm-item {
+      position: relative;
+      margin-bottom: 18px;
+      padding: 16px 18px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .rm-item:hover { border-color: rgba(79,142,247,0.3); }
+
+    .rm-item::before {
+      content: attr(data-n);
+      position: absolute;
+      left: -30px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--accent);
+      font-size: 9px;
+      font-weight: 800;
+      font-family: 'Syne', sans-serif;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 16px;
+      text-align: center;
+    }
+
+    .rm-phase { font-size: 10px; font-weight: 700; color: var(--accent2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+    .rm-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+    .rm-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .rm-time { font-size: 11px; color: var(--accent4); font-weight: 600; margin-top: 6px; }
+
+    /* ── ROADMAP MINI (in track tab) ── */
+    .trm { position: relative; padding-left: 28px; margin-top: 10px; }
+    .trm::before { content: ''; position: absolute; left: 9px; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, var(--accent), var(--accent3)); }
+
+    .trm-item { position: relative; margin-bottom: 12px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; transition: border-color 0.2s; }
+    .trm-item:hover { border-color: rgba(79,142,247,0.3); }
+    .trm-item::before { content: attr(data-n); position: absolute; left: -26px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); font-size: 9px; font-weight: 800; color: var(--accent); display: flex; align-items: center; justify-content: center; text-align: center; line-height: 14px; }
+    .trm-phase { font-size: 10px; font-weight: 700; color: var(--accent2); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 2px; }
+    .trm-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .trm-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .trm-money { font-size: 11px; color: var(--accent3); font-weight: 600; margin-top: 4px; }
+
+    /* ── LOADING ── */
+    .loading {
+      text-align: center;
+      padding: 90px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .spinner {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 28px;
+      position: relative;
+    }
+
+    .spinner::before, .spinner::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .spinner::before {
+      inset: 0;
+      border: 3px solid rgba(79,142,247,0.12);
+    }
+
+    .spinner::after {
+      inset: 0;
+      border: 3px solid transparent;
+      border-top-color: var(--accent);
+      border-right-color: var(--accent2);
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .loading-sub { font-size: 13px; color: var(--muted); }
+
+    /* ── RESULTS ── */
+    .result-hero {
+      background: linear-gradient(135deg, rgba(79,142,247,0.08), rgba(167,139,250,0.08));
+      border: 1px solid rgba(79,142,247,0.18);
+      border-radius: 20px;
+      padding: 36px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .result-hero .big { font-size: 52px; margin-bottom: 12px; }
+
+    .result-hero h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .result-hero p { font-size: 13px; color: var(--muted); }
+
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: var(--muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 22px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .insight {
+      background: linear-gradient(135deg, rgba(79,142,247,0.04), rgba(167,139,250,0.04));
+      border: 1px solid rgba(79,142,247,0.13);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .insight h4 { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 7px; display: flex; align-items: center; gap: 6px; }
+    .insight p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+
+    .tag {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      padding: 5px 13px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── EXAM ITEMS ── */
+    .exam-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 15px 17px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      transition: border-color 0.2s;
+    }
+
+    .exam-item:hover { border-color: rgba(79,142,247,0.3); }
+    .exam-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .exam-info { font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+
+    .exam-badge {
+      padding: 3px 11px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-nat { background: rgba(79,142,247,0.12); color: var(--accent); border: 1px solid rgba(79,142,247,0.2); }
+    .badge-st { background: rgba(167,139,250,0.12); color: var(--accent2); border: 1px solid rgba(167,139,250,0.2); }
+    .badge-intl { background: rgba(251,146,60,0.12); color: var(--accent4); border: 1px solid rgba(251,146,60,0.2); }
+
+    /* ── COMPARE TABLE ── */
+    .cmp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .cmp-table th { padding: 10px 14px; text-align: left; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); border-bottom: 1px solid var(--border2); }
+    .cmp-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+    .cmp-table tbody tr:hover td { background: var(--surface2); }
+    .cmp-table td:first-child { color: var(--text); font-weight: 600; }
+
+    /* ── INCOME HINT ── */
+    #income-hint {
+      margin-top: 7px;
+      padding: 9px 13px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid;
+    }
+    #income-hint.inc-low { background: rgba(52,211,153,0.07); border-color: rgba(52,211,153,0.2); color: var(--accent3); }
+    #income-hint.inc-mid { background: rgba(251,146,60,0.07); border-color: rgba(251,146,60,0.2); color: var(--accent4); }
+    #income-hint.inc-high { background: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.2); color: var(--accent2); }
+
+    /* ── GCHIP (grad exams/firms) ── */
+    .gchip {
+      padding: 7px 13px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .gchip.exam { background: rgba(79,142,247,0.08); border: 1px solid rgba(79,142,247,0.18); color: var(--accent); }
+    .gchip.firm { background: rgba(52,211,153,0.07); border: 1px solid rgba(52,211,153,0.18); color: var(--accent3); }
+
+    .hidden { display: none !important; }
+
+    /* ── MYSQL SCHEMA BOX ── */
+    .sql-box {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: var(--accent3);
+      overflow-x: auto;
+      line-height: 1.9;
+      margin-top: 16px;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      header, .progress-wrap, .action-row, .steps { display: none !important; }
+      .card { break-inside: avoid; }
+      body { background: #fff; color: #000; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="logo">Career<span class="logo-dot">Compass</span></div>
+    <div class="header-badge">✦ AI Powered</div>
+  </header>
+  <div class="progress-wrap">
+    <div class="progress-fill" id="prog" style="width:25%"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+     SCREEN 1 — PROFILE
+  ═══════════════════════════════════ -->
+  <div class="screen active" id="s1">
+    <div class="hero">
+      <div class="hero-pill">🎓 For Students & Young Professionals — India</div>
+      <h1>
+        <div class="line1">Find Your</div>
+        <div class="line2">Perfect Career Path</div>
+      </h1>
+      <p>Answer a few questions and get a personalised roadmap, entrance exams, and dream job plan.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step active" id="dot1">
+        <div class="step-dot">1</div>
+        <div class="step-label">Profile</div>
+      </div>
+      <div class="step" id="dot2">
+        <div class="step-dot">2</div>
+        <div class="step-label">Interests</div>
+      </div>
+      <div class="step" id="dot3">
+        <div class="step-dot">3</div>
+        <div class="step-label">Plan</div>
+      </div>
+    </div>
+
+    <div class="main">
+
+      <!-- Profile card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(79,142,247,0.1)">👤</div>
+          <div>
+            <div class="card-title">Your Profile</div>
+            <div class="card-sub">Tell us about your current academic stage</div>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div>
+            <label>Full Name</label>
+            <input type="text" id="inp-name" placeholder="e.g. Aryan Sharma">
+          </div>
+          <div>
+            <label>Current Class / Level</label>
+            <select id="inp-class" onchange="onClass(this.value)">
+              <option value="">— Select —</option>
+              <optgroup label="School">
+                <option value="8th9th">8th / 9th Class</option>
+                <option value="10th">10th Pass / Appearing</option>
+              </optgroup>
+              <optgroup label="12th Streams">
+                <option value="sci-pcm">12th Science — PCM (Engineering)</option>
+                <option value="sci-pcb">12th Science — PCB (Medical)</option>
+                <option value="sci-pcmb">12th Science — PCMB (Both)</option>
+                <option value="com-m">12th Commerce — with Maths</option>
+                <option value="com-nm">12th Commerce — without Maths</option>
+                <option value="arts">12th Arts / Humanities</option>
+                <option value="voc">12th Vocational / ITI / Diploma</option>
+              </optgroup>
+              <optgroup label="College & Beyond">
+                <option value="grad">Graduate / Final Year</option>
+                <option value="postgrad">Post-Graduate / Master's</option>
+                <option value="working">Working Professional</option>
+              </optgroup>
+            </select>
+          </div>
+          <div>
+            <label>Marks / CGPA</label>
+            <select id="inp-pct">
+              <option value="">— Select —</option>
+              <option value="90plus">90%+ (Excellent)</option>
+              <option value="7590">75–90% (Very Good)</option>
+              <option value="6075">60–75% (Good)</option>
+              <option value="below60">Below 60%</option>
+            </select>
+          </div>
+          <div>
+            <label>Family Income (Annual)</label>
+            <select id="inp-income" onchange="onIncome(this.value)">
+              <option value="">— Select —</option>
+              <option value="high">Above ₹10 LPA</option>
+              <option value="mid">₹3–10 LPA</option>
+              <option value="low">Below ₹3 LPA</option>
+            </select>
+            <div id="income-hint" style="display:none"></div>
+          </div>
+          <div>
+            <label>City / State</label>
+            <input type="text" id="inp-city" placeholder="e.g. Chandigarh, Punjab">
+          </div>
+          <div>
+            <label>Preferred Language</label>
+            <select id="inp-lang">
+              <option value="English">English</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Both">Both</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic subject card -->
+      <div class="card" id="subj-card">
+        <div id="st-empty">
+          <div class="card-header">
+            <div class="card-icon" style="background:var(--surface2)">📚</div>
+            <div>
+              <div class="card-title">Subjects / Stream</div>
+              <div class="card-sub">Select your class above to continue</div>
+            </div>
+          </div>
+          <div style="text-align:center;padding:28px;color:var(--muted2);font-size:14px">
+            ☝️ Select your <strong style="color:var(--accent)">Class</strong> first to see relevant subjects
+          </div>
+        </div>
+
+        <!-- 10th / 8th-9th -->
+        <div id="st-10th" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(79,142,247,0.1)">📚</div>
+            <div><div class="card-title">Favourite Subjects</div><div class="card-sub">Pick the subjects you enjoy most</div></div>
+          </div>
+          <div class="chip-grid" id="g-10th">
+            <div class="chip" data-v="Mathematics" onclick="tog(this)">📐 Maths</div>
+            <div class="chip" data-v="Physics" onclick="tog(this)">⚛️ Physics</div>
+            <div class="chip" data-v="Chemistry" onclick="tog(this)">🧪 Chemistry</div>
+            <div class="chip" data-v="Biology" onclick="tog(this)">🧬 Biology</div>
+            <div class="chip" data-v="Computer Science" onclick="tog(this)">💻 Computer</div>
+            <div class="chip" data-v="History" onclick="tog(this)">🏛️ History</div>
+            <div class="chip" data-v="Geography" onclick="tog(this)">🌍 Geography</div>
+            <div class="chip" data-v="Economics" onclick="tog(this)">📈 Economics</div>
+            <div class="chip" data-v="English Literature" onclick="tog(this)">📖 English Lit</div>
+            <div class="chip" data-v="Political Science" onclick="tog(this)">⚖️ Pol. Science</div>
+            <div class="chip" data-v="Social Science" onclick="tog(this)">🌐 Social Sci</div>
+            <div class="chip" data-v="Hindi" onclick="tog(this)">🔤 Hindi</div>
+            <div class="chip" data-v="Accountancy" onclick="tog(this)">🧾 Accounts</div>
+            <div class="chip" data-v="Drawing / Art" onclick="tog(this)">🎨 Drawing</div>
+            <div class="chip" data-v="Physical Education" onclick="tog(this)">🏃 PE</div>
+            <div class="chip" data-v="Music" onclick="tog(this)">🎵 Music</div>
+          </div>
+          <div class="hint hint-blue" style="margin-top:12px">💡 Your subject picks help us recommend the best 11th stream — Science, Commerce, or Arts.</div>
+        </div>
+
+        <!-- PCM -->
+        <div id="st-sci-pcm" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(79,142,247,0.1)">⚗️</div>
+            <div><div class="card-title">Science PCM — Subjects</div><div class="card-sub">Which are your strongest?</div></div>
+          </div>
+          <div class="chip-grid" id="g-sci-pcm">
+            <div class="chip hi" data-v="Mathematics" onclick="tog(this)">📐 Mathematics</div>
+            <div class="chip hi" data-v="Physics" onclick="tog(this)">⚛️ Physics</div>
+            <div class="chip hi" data-v="Chemistry" onclick="tog(this)">🧪 Chemistry</div>
+            <div class="chip" data-v="Computer Science" onclick="tog(this)">💻 Computer Sci</div>
+            <div class="chip" data-v="Physical Education" onclick="tog(this)">🏃 PE</div>
+            <div class="chip" data-v="English" onclick="tog(this)">📖 English</div>
+          </div>
+          <div class="hint hint-blue">💡 <strong>PCM</strong> opens Engineering (JEE), Architecture (NATA), Defence (NDA), Merchant Navy, and more.</div>
+        </div>
+
+        <!-- PCB -->
+        <div id="st-sci-pcb" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(52,211,153,0.1)">🧬</div>
+            <div><div class="card-title">Science PCB — Subjects</div><div class="card-sub">Which are your strongest?</div></div>
+          </div>
+          <div class="chip-grid" id="g-sci-pcb">
+            <div class="chip hi" data-v="Biology" onclick="tog(this)">🧬 Biology</div>
+            <div class="chip hi" data-v="Chemistry" onclick="tog(this)">🧪 Chemistry</div>
+            <div class="chip hi" data-v="Physics" onclick="tog(this)">⚛️ Physics</div>
+            <div class="chip" data-v="Psychology" onclick="tog(this)">🧠 Psychology</div>
+            <div class="chip" data-v="Computer Science" onclick="tog(this)">💻 Computer</div>
+            <div class="chip" data-v="English" onclick="tog(this)">📖 English</div>
+          </div>
+          <div class="hint hint-green">💡 <strong>PCB</strong> opens Medicine (NEET), Pharmacy, Biotechnology, Agriculture, Nursing, and Physiotherapy.</div>
+        </div>
+
+        <!-- PCMB -->
+        <div id="st-sci-pcmb" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(79,142,247,0.1)">🔬</div>
+            <div><div class="card-title">Science PCMB — All Science</div><div class="card-sub">Select your strongest subjects</div></div>
+          </div>
+          <div class="chip-grid" id="g-sci-pcmb">
+            <div class="chip hi" data-v="Mathematics" onclick="tog(this)">📐 Maths</div>
+            <div class="chip hi" data-v="Physics" onclick="tog(this)">⚛️ Physics</div>
+            <div class="chip hi" data-v="Chemistry" onclick="tog(this)">🧪 Chemistry</div>
+            <div class="chip hi" data-v="Biology" onclick="tog(this)">🧬 Biology</div>
+            <div class="chip" data-v="Computer Science" onclick="tog(this)">💻 Computer</div>
+            <div class="chip" data-v="English" onclick="tog(this)">📖 English</div>
+          </div>
+          <div class="hint hint-blue">💡 PCMB gives you both JEE (Engineering) and NEET (Medicine) options — the widest science path.</div>
+        </div>
+
+        <!-- Commerce with Maths -->
+        <div id="st-com-m" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(251,146,60,0.1)">💼</div>
+            <div><div class="card-title">Commerce with Maths</div><div class="card-sub">Your commerce strengths</div></div>
+          </div>
+          <div class="chip-grid" id="g-com-m">
+            <div class="chip hi" data-v="Accountancy" onclick="tog(this)">🧾 Accountancy</div>
+            <div class="chip hi" data-v="Business Studies" onclick="tog(this)">📊 Business Studies</div>
+            <div class="chip hi" data-v="Economics" onclick="tog(this)">📈 Economics</div>
+            <div class="chip hi" data-v="Mathematics" onclick="tog(this)">📐 Maths</div>
+            <div class="chip" data-v="Informatics Practices" onclick="tog(this)">💻 Informatics</div>
+            <div class="chip" data-v="Entrepreneurship" onclick="tog(this)">🚀 Entrepreneurship</div>
+            <div class="chip" data-v="English" onclick="tog(this)">📖 English</div>
+          </div>
+          <div class="hint hint-orange">💡 Commerce + Maths opens <strong>CA, MBA (CAT/IIM), CFA, Investment Banking</strong> — highest-earning commerce paths.</div>
+        </div>
+
+        <!-- Commerce without Maths -->
+        <div id="st-com-nm" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(251,146,60,0.1)">🧾</div>
+            <div><div class="card-title">Commerce — Subjects</div><div class="card-sub">Select your strongest areas</div></div>
+          </div>
+          <div class="chip-grid" id="g-com-nm">
+            <div class="chip hi" data-v="Accountancy" onclick="tog(this)">🧾 Accountancy</div>
+            <div class="chip hi" data-v="Business Studies" onclick="tog(this)">📊 Business</div>
+            <div class="chip hi" data-v="Economics" onclick="tog(this)">📈 Economics</div>
+            <div class="chip" data-v="Marketing" onclick="tog(this)">📣 Marketing</div>
+            <div class="chip" data-v="English" onclick="tog(this)">📖 English</div>
+            <div class="chip" data-v="Entrepreneurship" onclick="tog(this)">🚀 Entrepreneurship</div>
+          </div>
+          <div class="hint hint-orange">💡 BBA, B.Com, Hotel Management, Fashion Management, HR are excellent paths without Maths.</div>
+        </div>
+
+        <!-- Arts -->
+        <div id="st-arts" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(167,139,250,0.1)">🎨</div>
+            <div><div class="card-title">Arts / Humanities — Subjects</div><div class="card-sub">Which subjects are your strongest?</div></div>
+          </div>
+          <div class="chip-grid" id="g-arts">
+            <div class="chip hi" data-v="History" onclick="tog(this)">🏛️ History</div>
+            <div class="chip hi" data-v="Geography" onclick="tog(this)">🌍 Geography</div>
+            <div class="chip hi" data-v="Political Science" onclick="tog(this)">⚖️ Pol. Science</div>
+            <div class="chip hi" data-v="Sociology" onclick="tog(this)">👥 Sociology</div>
+            <div class="chip hi" data-v="Psychology" onclick="tog(this)">🧠 Psychology</div>
+            <div class="chip" data-v="English Literature" onclick="tog(this)">📖 Literature</div>
+            <div class="chip" data-v="Economics" onclick="tog(this)">📈 Economics</div>
+            <div class="chip" data-v="Fine Arts" onclick="tog(this)">🎨 Fine Arts</div>
+            <div class="chip" data-v="Music" onclick="tog(this)">🎵 Music</div>
+            <div class="chip" data-v="Physical Education" onclick="tog(this)">🏃 PE</div>
+            <div class="chip" data-v="Philosophy" onclick="tog(this)">💭 Philosophy</div>
+            <div class="chip" data-v="Hindi Literature" onclick="tog(this)">🔤 Hindi Lit</div>
+          </div>
+          <div class="hint hint-purple">💡 Arts opens UPSC/IAS, Law (CLAT), Journalism, Psychology, Social Work, Design — unlimited paths.</div>
+        </div>
+
+        <!-- Vocational -->
+        <div id="st-voc" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:var(--surface2)">🔧</div>
+            <div><div class="card-title">Vocational / ITI / Diploma</div><div class="card-sub">What are you studying or skilled in?</div></div>
+          </div>
+          <div class="chip-grid" id="g-voc">
+            <div class="chip hi" data-v="Electrical Trade" onclick="tog(this)">⚡ Electrical</div>
+            <div class="chip hi" data-v="Mechanical Trade" onclick="tog(this)">⚙️ Mechanical</div>
+            <div class="chip hi" data-v="Civil / Construction" onclick="tog(this)">🏗️ Civil</div>
+            <div class="chip hi" data-v="Computer Hardware" onclick="tog(this)">💻 Computer HW</div>
+            <div class="chip" data-v="Automotive" onclick="tog(this)">🚗 Automotive</div>
+            <div class="chip" data-v="Fashion / Textile" onclick="tog(this)">👗 Fashion/Textile</div>
+            <div class="chip" data-v="Beauty & Wellness" onclick="tog(this)">💆 Beauty/Wellness</div>
+            <div class="chip" data-v="Hospitality" onclick="tog(this)">🏨 Hospitality</div>
+            <div class="chip" data-v="Agriculture" onclick="tog(this)">🌾 Agriculture</div>
+            <div class="chip" data-v="Healthcare Assistant" onclick="tog(this)">🩺 Healthcare</div>
+          </div>
+          <div class="hint hint-green">💡 Vocational skills + NSDC certification open excellent technical jobs and entrepreneurship opportunities.</div>
+        </div>
+
+        <!-- Graduate -->
+        <div id="st-grad" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(52,211,153,0.1)">🎓</div>
+            <div><div class="card-title">Your Graduation Degree</div><div class="card-sub">What are you studying or completed?</div></div>
+          </div>
+          <div class="stream-grid" id="g-grad">
+            <div class="stream-card" data-v="B.Tech / B.E. Engineering" onclick="pickStream(this)"><div class="si">⚙️</div><div class="sn">B.Tech / B.E.</div><div class="ss">CSE, ECE, Mech, Civil...</div></div>
+            <div class="stream-card" data-v="MBBS / BDS / Medical" onclick="pickStream(this)"><div class="si">🏥</div><div class="sn">MBBS / BDS</div><div class="ss">Doctor, Dentist, Pharma</div></div>
+            <div class="stream-card" data-v="B.Com / BBA Commerce" onclick="pickStream(this)"><div class="si">💼</div><div class="sn">B.Com / BBA</div><div class="ss">Finance, Business, Mgmt</div></div>
+            <div class="stream-card" data-v="BA Arts / Humanities" onclick="pickStream(this)"><div class="si">📖</div><div class="sn">BA Arts</div><div class="ss">History, English, Pol.Sci</div></div>
+            <div class="stream-card" data-v="B.Sc Science" onclick="pickStream(this)"><div class="si">🔬</div><div class="sn">B.Sc Science</div><div class="ss">Physics, Chem, Bio, IT</div></div>
+            <div class="stream-card" data-v="BCA / MCA IT" onclick="pickStream(this)"><div class="si">💻</div><div class="sn">BCA / MCA</div><div class="ss">Software, IT, Data</div></div>
+            <div class="stream-card" data-v="LLB / BA LLB Law" onclick="pickStream(this)"><div class="si">⚖️</div><div class="sn">LLB / BA LLB</div><div class="ss">Advocate, Judiciary</div></div>
+            <div class="stream-card" data-v="B.Ed / Teaching" onclick="pickStream(this)"><div class="si">📚</div><div class="sn">B.Ed / Teaching</div><div class="ss">KVS, TET, NVS</div></div>
+            <div class="stream-card" data-v="B.Des / BFA Design" onclick="pickStream(this)"><div class="si">🎨</div><div class="sn">B.Des / BFA</div><div class="ss">Design, Animation, Art</div></div>
+            <div class="stream-card" data-v="MBA / PGDM" onclick="pickStream(this)"><div class="si">🏢</div><div class="sn">MBA / PGDM</div><div class="ss">Management, Marketing</div></div>
+            <div class="stream-card" data-v="B.Pharm / Pharmacy" onclick="pickStream(this)"><div class="si">💊</div><div class="sn">B.Pharm</div><div class="ss">Drug, Healthcare</div></div>
+            <div class="stream-card" data-v="Other / Diploma" onclick="pickStream(this)"><div class="si">🎓</div><div class="sn">Other Degree</div><div class="ss">Diploma, Certificate...</div></div>
+          </div>
+          <div class="hint hint-green" style="margin-top:12px">💡 We'll tailor guidance specifically for <strong>graduate-level career paths</strong> — exams, companies, and higher studies.</div>
+        </div>
+
+        <!-- Post-grad -->
+        <div id="st-postgrad" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(167,139,250,0.1)">🎓</div>
+            <div><div class="card-title">Your Post-Graduate Degree</div><div class="card-sub">Your specialisation or master's field</div></div>
+          </div>
+          <div class="stream-grid" id="g-postgrad">
+            <div class="stream-card" data-v="M.Tech / ME Engineering" onclick="pickStream(this)"><div class="si">⚙️</div><div class="sn">M.Tech / ME</div><div class="ss">Research, PSU, IITs</div></div>
+            <div class="stream-card" data-v="MBA / PGDM Management" onclick="pickStream(this)"><div class="si">🏢</div><div class="sn">MBA / PGDM</div><div class="ss">IIM, XLRI, IIFT</div></div>
+            <div class="stream-card" data-v="MD / MS Medicine" onclick="pickStream(this)"><div class="si">🏥</div><div class="sn">MD / MS</div><div class="ss">Specialist Doctor</div></div>
+            <div class="stream-card" data-v="M.Sc Science" onclick="pickStream(this)"><div class="si">🔬</div><div class="sn">M.Sc Science</div><div class="ss">CSIR, DRDO, Research</div></div>
+            <div class="stream-card" data-v="MA Arts Humanities" onclick="pickStream(this)"><div class="si">📖</div><div class="sn">MA Arts</div><div class="ss">UPSC, UGC NET, Teach</div></div>
+            <div class="stream-card" data-v="LLM Law" onclick="pickStream(this)"><div class="si">⚖️</div><div class="sn">LLM Law</div><div class="ss">Senior Advocate, Academia</div></div>
+            <div class="stream-card" data-v="MCA IT" onclick="pickStream(this)"><div class="si">💻</div><div class="sn">MCA IT</div><div class="ss">Software, Product, IT</div></div>
+            <div class="stream-card" data-v="Other PG" onclick="pickStream(this)"><div class="si">📜</div><div class="sn">Other PG</div><div class="ss">PhD, Certificate, PGD</div></div>
+          </div>
+        </div>
+
+        <!-- Working -->
+        <div id="st-working" class="hidden">
+          <div class="card-header">
+            <div class="card-icon" style="background:rgba(251,146,60,0.1)">💼</div>
+            <div><div class="card-title">Your Current Domain</div><div class="card-sub">What field are you currently working in?</div></div>
+          </div>
+          <div class="stream-grid" id="g-working">
+            <div class="stream-card" data-v="IT / Software Professional" onclick="pickStream(this)"><div class="si">💻</div><div class="sn">IT / Software</div><div class="ss">Developer, QA, DevOps</div></div>
+            <div class="stream-card" data-v="Banking / Finance Professional" onclick="pickStream(this)"><div class="si">🏦</div><div class="sn">Banking / Finance</div><div class="ss">BFSI, Insurance, CA</div></div>
+            <div class="stream-card" data-v="Government / PSU Employee" onclick="pickStream(this)"><div class="si">🏛️</div><div class="sn">Govt / PSU</div><div class="ss">State, Central, PSU</div></div>
+            <div class="stream-card" data-v="Healthcare / Medical Professional" onclick="pickStream(this)"><div class="si">🏥</div><div class="sn">Healthcare</div><div class="ss">Doctor, Nurse, Pharma</div></div>
+            <div class="stream-card" data-v="Teaching / Academic" onclick="pickStream(this)"><div class="si">📚</div><div class="sn">Teaching</div><div class="ss">School, College, Tutor</div></div>
+            <div class="stream-card" data-v="Sales / Marketing" onclick="pickStream(this)"><div class="si">📣</div><div class="sn">Sales / Marketing</div><div class="ss">BD, Digital, Brand</div></div>
+            <div class="stream-card" data-v="Self-employed / Business" onclick="pickStream(this)"><div class="si">🚀</div><div class="sn">Business / Self</div><div class="ss">Startup, Freelance, Shop</div></div>
+            <div class="stream-card" data-v="Other Domain" onclick="pickStream(this)"><div class="si">🌐</div><div class="sn">Other Domain</div><div class="ss">Operations, HR, etc.</div></div>
+          </div>
+          <div class="hint hint-orange" style="margin-top:12px">💡 We'll focus on <strong>upskilling, switching, or advancing</strong> in your career — exams and companies relevant to your experience level.</div>
+        </div>
+      </div>
+
+      <!-- Stream banner -->
+      <div class="banner" id="stream-banner"></div>
+
+      <!-- Track explorer -->
+      <div class="card" id="explore-card" style="display:none">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(52,211,153,0.1)">🧭</div>
+          <div><div class="card-title">Career Explorer</div><div class="card-sub">Browse popular career paths for your stream</div></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px" id="ttab-row"></div>
+        <div id="tpanel-wrap"></div>
+      </div>
+
+      <!-- Compare card -->
+      <div class="card" id="compare-card" style="display:none">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(167,139,250,0.1)">⚖️</div>
+          <div><div class="card-title">Career Comparison</div><div class="card-sub">Side-by-side view of your selected paths</div></div>
+        </div>
+        <div id="compare-body"></div>
+        <button class="btn btn-ghost" style="margin-top:10px;font-size:12px" onclick="hideCompare()">✕ Close Comparison</button>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-primary" onclick="goToStep2()">Continue to Interests →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+     SCREEN 2 — INTERESTS
+  ═══════════════════════════════════ -->
+  <div class="screen" id="s2">
+    <div class="steps" style="padding-top:48px">
+      <div class="step done"><div class="step-dot">✓</div><div class="step-label">Profile</div></div>
+      <div class="step active"><div class="step-dot">2</div><div class="step-label">Interests</div></div>
+      <div class="step"><div class="step-dot">3</div><div class="step-label">Plan</div></div>
+    </div>
+    <div class="main">
+
+      <!-- Career interests -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(79,142,247,0.1)">🎯</div>
+          <div><div class="card-title">Career Interests</div><div class="card-sub">Select 1–3 fields you want to work in (more = deeper analysis)</div></div>
+        </div>
+        <div class="chip-grid" id="interest-chips">
+          <div class="chip" data-v="Technology & Coding" onclick="tog(this)">💻 Technology</div>
+          <div class="chip" data-v="Medicine & Healthcare" onclick="tog(this)">🏥 Medicine</div>
+          <div class="chip" data-v="Engineering" onclick="tog(this)">⚙️ Engineering</div>
+          <div class="chip" data-v="Government & Civil Services" onclick="tog(this)">🏛️ Civil Services</div>
+          <div class="chip" data-v="Business & Finance" onclick="tog(this)">💼 Finance</div>
+          <div class="chip" data-v="Law & Justice" onclick="tog(this)">⚖️ Law</div>
+          <div class="chip" data-v="Creative Arts & Design" onclick="tog(this)">🎨 Design</div>
+          <div class="chip" data-v="Media & Journalism" onclick="tog(this)">📰 Media</div>
+          <div class="chip" data-v="Teaching & Education" onclick="tog(this)">📚 Education</div>
+          <div class="chip" data-v="Science & Research" onclick="tog(this)">🔬 Research</div>
+          <div class="chip" data-v="Defence & Armed Forces" onclick="tog(this)">🪖 Defence</div>
+          <div class="chip" data-v="Entrepreneurship" onclick="tog(this)">🚀 Entrepreneurship</div>
+          <div class="chip" data-v="Sports & Fitness" onclick="tog(this)">🏅 Sports</div>
+          <div class="chip" data-v="Agriculture & Environment" onclick="tog(this)">🌾 Agriculture</div>
+          <div class="chip" data-v="Architecture" onclick="tog(this)">🏗️ Architecture</div>
+          <div class="chip" data-v="Social Work & NGO" onclick="tog(this)">🤝 Social Work</div>
+        </div>
+      </div>
+
+      <!-- Values -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(167,139,250,0.1)">💎</div>
+          <div><div class="card-title">What Matters to You?</div><div class="card-sub">Select your work values (optional)</div></div>
+        </div>
+        <div class="chip-grid">
+          <div class="chip" data-v="High salary" onclick="tog(this)">💰 High Salary</div>
+          <div class="chip" data-v="Job security" onclick="tog(this)">🔒 Job Security</div>
+          <div class="chip" data-v="Social impact" onclick="tog(this)">🌍 Social Impact</div>
+          <div class="chip" data-v="Creativity" onclick="tog(this)">✨ Creativity</div>
+          <div class="chip" data-v="Work-life balance" onclick="tog(this)">⚖️ Balance</div>
+          <div class="chip" data-v="Leadership" onclick="tog(this)">👑 Leadership</div>
+          <div class="chip" data-v="Continuous learning" onclick="tog(this)">📈 Growth</div>
+          <div class="chip" data-v="Independence" onclick="tog(this)">🦅 Independence</div>
+          <div class="chip" data-v="Fame & recognition" onclick="tog(this)">⭐ Recognition</div>
+          <div class="chip" data-v="Travel" onclick="tog(this)">✈️ Travel</div>
+        </div>
+      </div>
+
+      <!-- Dream role -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(79,142,247,0.1)">💬</div>
+          <div><div class="card-title">Dream Role</div><div class="card-sub">Optional — describe your dream career or role model</div></div>
+        </div>
+        <textarea id="inp-free" placeholder="e.g. I want to become an IAS officer, or I love coding and want to build apps, or I'm confused between medicine and engineering..."></textarea>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="back1()">← Back</button>
+        <button class="btn btn-primary" id="gen-btn" onclick="generate()">✨ Generate My Career Plan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+     SCREEN 3 — LOADING
+  ═══════════════════════════════════ -->
+  <div class="screen" id="s3">
+    <div class="loading">
+      <div class="spinner"></div>
+      <div class="loading-title" id="load-msg">Analysing your profile...</div>
+      <div class="loading-sub">Building your personalised career roadmap with AI</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+     SCREEN 4 — RESULTS
+  ═══════════════════════════════════ -->
+  <div class="screen" id="s4">
+    <div class="steps" style="padding-top:44px">
+      <div class="step done"><div class="step-dot">✓</div><div class="step-label">Profile</div></div>
+      <div class="step done"><div class="step-dot">✓</div><div class="step-label">Interests</div></div>
+      <div class="step active"><div class="step-dot">3</div><div class="step-label">Plan</div></div>
+    </div>
+    <div class="main">
+      <div id="results"></div>
+
+      <div class="action-row">
+        <button class="btn btn-ghost" onclick="restart()">🔄 Start Over</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT
+  ═══════════════════════════════════════════════════ -->
+  <script>
+    // ─────────────────────────────────
+    // STATE
+    // ─────────────────────────────────
+    const S = {
+      name:'', cls:'', pct:'', income:'', city:'', lang:'English',
+      subjects:[], gradStream:'', interests:[], values:[], free:''
+    };
+
+    const IS_COLLEGE = cls => ['grad','postgrad','working'].includes(cls);
+
+    // ─────────────────────────────────
+    // CAREER TRACKS DB
+    // ─────────────────────────────────
+    const TRACKS = {
+      'Technology & Coding':{
+        icon:'💻',sal:'₹6–80 LPA',yrs:4,difficulty:'Medium-High',competition:'Very High',
+        jobs:['Software Engineer','Data Scientist','AI/ML Engineer','Cloud Architect','Cybersecurity Analyst','DevOps Engineer','Game Developer'],
+        roadmap:[
+          {phase:'Now',title:'Build Foundation',desc:'Learn Python/C++ basics (free). Solve LeetCode Easy. Score 75%+ in PCM 12th.',time:'1–2 yr',money:'₹0–500/mo'},
+          {phase:'Entrance',title:'JEE Main / BITSAT',desc:'95+ percentile JEE Main for NIT, 99+ for IIT. BITSAT 300+ for BITS Pilani. Weekly mocks.',time:'1–2 yr',money:'₹8K–50K coaching'},
+          {phase:'College',title:'B.Tech CSE / IT / AI',desc:'Build 5+ GitHub projects. Learn DSA, DBMS, OS, Networks. Internships from 2nd year.',time:'4 yr',money:'₹50K–2L/yr NIT'},
+          {phase:'Internship',title:'Internships + Hackathons',desc:'3 internships at startups/MNCs. Win hackathons. Open source. LinkedIn profile.',time:'2nd–4th yr',money:'₹10K–30K/mo stipend'},
+          {phase:'Placement',title:'Campus / Off-Campus Job',desc:'TCS/Infosys (₹3–6L) or Google/Microsoft/Amazon (₹15–40L). Target tier-1.',time:'Final yr',money:'₹3–40 LPA'},
+          {phase:'Growth',title:'Specialise — AI/Cloud/Security',desc:'AWS/GCP certifications. Product companies. Freelance on Upwork. Target ₹30+ LPA.',time:'2–5 yr',money:'₹15–80 LPA'},
+          {phase:'Advanced',title:'Senior / Tech Lead / CTO',desc:'Tech Lead, Principal Eng, or CTO. FAANG pays ₹50–200 LPA.',time:'5–10 yr',money:'₹30–200 LPA+'}
+        ]
+      },
+      'Medicine & Healthcare':{
+        icon:'🏥',sal:'₹4–50 LPA',yrs:7,difficulty:'Very High',competition:'Extreme',
+        jobs:['MBBS Doctor','Dentist BDS','Pharmacist','Physiotherapist','Nurse','Medical Researcher','Ayurvedic Doctor'],
+        roadmap:[
+          {phase:'Now',title:'PCB Foundation',desc:'Score 85%+ in Bio/Chem/Physics. Start NEET MCQ practice from Class 11. NCERT is bible.',time:'2 yr',money:'₹10K–1L/yr coaching'},
+          {phase:'Entrance',title:'NEET UG — Target 600+/720',desc:'Biology=360 marks — master it first. Allen/Aakash test series. 5+ years PYQs.',time:'1–2 yr',money:'₹50K–1.5L coaching'},
+          {phase:'College',title:'MBBS 4.5 Years',desc:'Government college (NEET rank). Complete all rotations seriously. Build clinical skills.',time:'4.5 yr',money:'₹10K/yr govt – ₹10L/yr pvt'},
+          {phase:'Internship',title:'Rotating Internship 1yr',desc:'All departments — Medicine, Surgery, OB/GYN, Paediatrics. Essential for license.',time:'1 yr',money:'₹10K–15K/mo stipend'},
+          {phase:'PG Entrance',title:'NEET PG for MD/MS',desc:'Clear NEET PG for specialisation. Surgery, Dermatology, Paediatrics, Ortho.',time:'1–2 yr prep',money:'₹30K–60K/mo stipend during MD'},
+          {phase:'Practice',title:'Hospital / Clinic',desc:'Government hospital, private hospital, or start clinic. Super-speciality optional.',time:'Ongoing',money:'₹8–50 LPA'},
+          {phase:'Advanced',title:'Super-Speciality / International',desc:'DM/MCh for highest salary. USMLE for USA (₹1 Cr+). Telemedicine startup option.',time:'2–3 yr more',money:'₹30–100 LPA+'}
+        ]
+      },
+      'Engineering':{
+        icon:'⚙️',sal:'₹4–25 LPA',yrs:4,difficulty:'High',competition:'High',
+        jobs:['Mechanical Eng','Civil Eng','Electrical Eng','ECE Engineer','Aerospace Eng','Chemical Eng','PSU Engineer'],
+        roadmap:[
+          {phase:'Now',title:'PCM Foundation',desc:'Master Physics and Maths. Score 75%+ in boards. Build hands-on interest.',time:'2 yr',money:'₹5K–50K coaching'},
+          {phase:'Entrance',title:'JEE Main / State CET',desc:'JEE Main for NITs. State CETs for state govt colleges. Target 85%+ percentile.',time:'1–2 yr',money:'₹20K–1L coaching'},
+          {phase:'College',title:'B.Tech Core Branch 4yr',desc:'Maintain 7+ CGPA. Mandatory 6-month industrial training. Design competitions.',time:'4 yr',money:'₹50K–2L/yr'},
+          {phase:'Skills',title:'GATE Preparation',desc:'Start GATE prep from 3rd year for M.Tech/PSU jobs — ONGC, BHEL, NTPC, SAIL.',time:'1–2 yr',money:'₹10K–50K test series'},
+          {phase:'First Job',title:'PSU / Campus Placement',desc:'GATE rank under 500 for PSUs (₹8–20L). Campus: L&T, Tata, Mahindra, Bosch.',time:'Final yr',money:'₹4–20 LPA'},
+          {phase:'Growth',title:'M.Tech / Senior Engineer',desc:'M.Tech IIT/NIT for research or design. UPSC ESE for Group-A Govt posts.',time:'2 yr optional',money:'₹25K–35K/mo stipend'},
+          {phase:'Advanced',title:'Project Manager / Director',desc:'Project Manager at MNC. Abroad: UAE, USA, Canada, Germany for core engineering.',time:'5–10 yr',money:'₹15–40 LPA'}
+        ]
+      },
+      'Government & Civil Services':{
+        icon:'🏛️',sal:'₹6–30 LPA + perks',yrs:3,difficulty:'Extreme',competition:'Extreme',
+        jobs:['IAS Officer','IPS Officer','IFS Diplomat','SSC Inspector','Bank PO','State PCS SDM','RBI Grade B'],
+        roadmap:[
+          {phase:'Now',title:'Any Stream — Awareness',desc:'Any stream 12th. Read The Hindu daily. Start NCERT from now.',time:'School onwards',money:'₹0'},
+          {phase:'Graduation',title:'Any Bachelor Degree',desc:'BA/B.Com/B.Tech all accepted. Score 55%+. Join debate, GD clubs.',time:'3 yr',money:'₹20K–1L/yr'},
+          {phase:'Foundation',title:'NCERT + GS Foundation',desc:'Cover all NCERT (Class 6–12). History, Geography, Polity, Economy, Science.',time:'6–12 mo',money:'₹5K–50K books+tests'},
+          {phase:'Prelims',title:'UPSC Prelims Prep',desc:'Current Affairs (12 months), CSAT, 10yr PYQs. Target 120+ GS Paper-1.',time:'1–2 yr',money:'₹20K–2L coaching'},
+          {phase:'Mains',title:'Mains + Personality Test',desc:'Essay, GS 1–4, Optional subject. Daily answer writing. Interview coaching.',time:'6–12 mo',money:'₹30K–1.5L coaching'},
+          {phase:'Training',title:'LBSNAA / NPA / Academy',desc:'IAS → LBSNAA Mussoorie. IPS → NPA Hyderabad. 2-year training.',time:'2 yr',money:'Full salary during training'},
+          {phase:'Posting',title:'District Level Officer',desc:'SDM → DM → Collector → Secretary. Job security + pension.',time:'35 yr career',money:'₹56K–2.5L/mo + perks'}
+        ]
+      },
+      'Business & Finance':{
+        icon:'💼',sal:'₹5–100 LPA',yrs:4,difficulty:'High',competition:'High',
+        jobs:['Chartered Accountant','Investment Banker','Bank Manager','Financial Analyst','Company Secretary','MBA Manager','CFO'],
+        roadmap:[
+          {phase:'Now',title:'Commerce Foundation',desc:'Score 85%+ in Accountancy, Economics. Take Maths optional — opens MBA+CFA paths.',time:'2 yr',money:'₹5K–30K coaching'},
+          {phase:'After 12th',title:'CA Foundation / B.Com Hons',desc:'Register CA Foundation IMMEDIATELY after 12th. Or B.Com Hons DU/BHU via CUET.',time:'1 yr',money:'₹5K fees / ₹20K–50K B.Com'},
+          {phase:'Professional',title:'CA Inter + Articleship',desc:'Clear CA Intermediate (15% pass rate). 3-year articleship under CA firm.',time:'3–4 yr',money:'₹5K–15K/mo stipend'},
+          {phase:'Qualification',title:'CA Final / CAT/MBA',desc:'CA Final (12% pass rate). OR CAT for IIM MBA simultaneously.',time:'1–2 yr',money:'₹10K exam / ₹20K–1L IIM'},
+          {phase:'First Job',title:'Big 4 / Investment Banking',desc:'Deloitte, PwC, EY, KPMG (₹7–15L). Goldman Sachs, Morgan Stanley (₹15–40L).',time:'After qualification',money:'₹7–40 LPA'},
+          {phase:'Growth',title:'CFO / Finance Director',desc:'VP Finance, CFA certification, SEBI roles. CFO of listed company.',time:'5–10 yr',money:'₹20–80 LPA'},
+          {phase:'Advanced',title:'CA Firm Partner / CFO',desc:'Partner at CA Firm (₹50L–2Cr). CFO of MNC. Start wealth management firm.',time:'10–20 yr',money:'₹50L–2Cr+'}
+        ]
+      },
+      'Law & Justice':{
+        icon:'⚖️',sal:'₹5–100 LPA',yrs:5,difficulty:'High',competition:'High',
+        jobs:['Advocate Lawyer','Corporate Lawyer','Judge','Legal Advisor','Patent Attorney','Cyber Law Expert','Judiciary'],
+        roadmap:[
+          {phase:'Now',title:'Any Stream 12th',desc:'Score 50%+ (CLAT minimum). Read newspapers, build vocabulary. Arts/Pol.Sci helps.',time:'2 yr',money:'₹5K–30K CLAT coaching'},
+          {phase:'Entrance',title:'CLAT / AILET',desc:'CLAT for 24 NLUs. AILET for NLU Delhi (110 seats). Score 120+/150 for NLSIU.',time:'6–12 mo prep',money:'₹10K–50K coaching'},
+          {phase:'College',title:'BA LLB — 5 Years at NLU',desc:'Contract, Constitutional, Criminal, Corporate, IPR, Cyber Law. Moot courts essential.',time:'5 yr',money:'₹1–3L/yr NLU'},
+          {phase:'Internship',title:'Court + Law Firm Internship',desc:'High Court/Supreme Court. Tier-1 firms: AZB, Cyril Amarchand, Shardul.',time:'Every semester',money:'₹5K–20K/mo stipend'},
+          {phase:'Licence',title:'AIBE + Bar Enrolment',desc:'All India Bar Exam after LLB. Enrol with State Bar Council.',time:'6 mo post LLB',money:'₹1K exam fee'},
+          {phase:'Career',title:'Law Firm / Litigation',desc:'Junior Associate Tier-1 firm (₹8–20L). Criminal/Civil litigation practice.',time:'1–5 yr',money:'₹6–25 LPA'},
+          {phase:'Senior',title:'Senior Advocate / Partner',desc:'Senior Advocate designation. Partner at firm. Magistrate → HC Judge career.',time:'10–20 yr',money:'₹30–100 LPA+'}
+        ]
+      },
+      'Creative Arts & Design':{
+        icon:'🎨',sal:'₹3–50 LPA',yrs:4,difficulty:'Medium',competition:'Medium',
+        jobs:['UI/UX Designer','Fashion Designer','Graphic Designer','Animator VFX','Architect','Interior Designer','Art Director'],
+        roadmap:[
+          {phase:'Now',title:'Build Portfolio',desc:'Sketch daily. Figma, Canva, Procreate. Start Instagram/Behance portfolio now.',time:'Now',money:'₹0–5K tools'},
+          {phase:'Entrance',title:'UCEED / NIFT / NID DAT',desc:'UCEED for IIT B.Des. NIFT for fashion/design. NID DAT for product/graphic.',time:'1 yr prep',money:'₹10K–40K coaching'},
+          {phase:'College',title:'B.Des / BFA / BID — 4yr',desc:'Every project = portfolio piece. Post on Behance, Dribbble. Freelance alongside.',time:'4 yr',money:'₹1–4L/yr'},
+          {phase:'Freelance',title:'Freelance + Internships',desc:'Fiverr, Upwork, Toptal from 2nd year. Intern at design studios, ad agencies.',time:'During college',money:'₹5K–50K/project'},
+          {phase:'First Job',title:'Junior Designer',desc:'Design agency, tech startup, fashion house. Build 20+ portfolio pieces.',time:'After degree',money:'₹3–12 LPA'},
+          {phase:'Growth',title:'Senior Designer / Art Director',desc:'UI/UX specialist (highest demand), Brand Identity, Motion Design, VFX.',time:'3–7 yr',money:'₹10–35 LPA'},
+          {phase:'Advanced',title:'Creative Director / Studio',desc:'CD at agency. Start own design studio. International clients via Behance.',time:'8–15 yr',money:'₹20–60 LPA+'}
+        ]
+      },
+      'Media & Journalism':{
+        icon:'📰',sal:'₹3–30 LPA',yrs:3,difficulty:'Medium',competition:'High',
+        jobs:['News Reporter','TV Anchor','Content Creator','Film Director','PR Manager','Photojournalist','Editor'],
+        roadmap:[
+          {phase:'Now',title:'Build Comm Skills',desc:'Start blog/YouTube. Write for school magazine. Read 2 newspapers daily.',time:'Now',money:'₹0'},
+          {phase:'Entrance',title:'IIMC / BJMC / Symbiosis',desc:'IIMC PG Diploma after graduation. BJMC via CUET for DU/JMI.',time:'6–12 mo prep',money:'₹5K–15K coaching'},
+          {phase:'College',title:'Journalism / Mass Comm',desc:'BJMC 3yr or IIMC PG. Specialise in Print, TV, Digital, Film.',time:'3 yr',money:'₹50K–2L/yr'},
+          {phase:'Internship',title:'Media House Internships',desc:'The Hindu, NDTV, India Today, The Quint. Start YouTube alongside.',time:'During college',money:'₹5K–15K/mo stipend'},
+          {phase:'First Job',title:'Reporter / Writer / Producer',desc:'Junior Reporter, Content Writer, Associate Producer. Build byline portfolio.',time:'After degree',money:'₹3–8 LPA'},
+          {phase:'Growth',title:'Senior Reporter / Producer',desc:'Beat journalist, Senior Producer, Video Content Head. Digital media pays better.',time:'3–7 yr',money:'₹8–20 LPA'},
+          {phase:'Advanced',title:'Editor / Film Director',desc:'Editor-in-Chief, Executive Producer, Film Director. Start production house.',time:'8–15 yr',money:'₹15–50 LPA+'}
+        ]
+      },
+      'Teaching & Education':{
+        icon:'📚',sal:'₹4–20 LPA',yrs:3,difficulty:'Medium',competition:'Medium',
+        jobs:['KVS Teacher','College Lecturer','Principal','EdTech Creator','Coaching Owner','School Counsellor'],
+        roadmap:[
+          {phase:'Now',title:'Choose Your Subject',desc:'Decide subject you want to teach. Take that stream in 12th.',time:'12th onwards',money:'₹0'},
+          {phase:'Graduation',title:'BA/B.Sc in Your Subject',desc:'Score 50%+ for B.Ed, 55%+ for UGC NET. Deep subject knowledge essential.',time:'3 yr',money:'₹10K–50K/yr'},
+          {phase:'B.Ed',title:'Bachelor of Education 2yr',desc:'Mandatory for Classes 1–12 teaching. Pedagogy, lesson planning, classroom management.',time:'2 yr',money:'₹25K–1L/yr'},
+          {phase:'Exam',title:'CTET / State TET',desc:'CTET Paper-1 (Class 1–5) or Paper-2 (Class 6–8). State TET for state jobs. Lifetime validity.',time:'6–12 mo prep',money:'₹1.5K exam fees'},
+          {phase:'First Job',title:'Govt or Private School',desc:'KVS/NVS for best govt jobs (₹5–12L). DPS, Ryan, DAV for good private schools.',time:'After TET',money:'₹4–12 LPA'},
+          {phase:'Growth',title:'UGC NET / College Lecturer',desc:'UGC NET for Assistant Professor (₹7–15L). JRF fellowship for PhD funded.',time:'1–2 yr prep',money:'₹25K–35K/mo JRF'},
+          {phase:'Advanced',title:'HoD / Principal / EdTech',desc:'Unacademy, BYJU\'S, Vedantu creator (₹5–25L). Start coaching institute.',time:'10–15 yr',money:'₹10–30 LPA'}
+        ]
+      },
+      'Science & Research':{
+        icon:'🔬',sal:'₹4–25 LPA',yrs:5,difficulty:'High',competition:'Medium',
+        jobs:['Research Scientist','DRDO Scientist','ISRO Engineer','IISc Faculty','Pharmaceutical Researcher','Data Scientist'],
+        roadmap:[
+          {phase:'Now',title:'PCM/PCB Strong Foundation',desc:'Score 90%+ in 12th. Olympiads: KVPY, NTSE, Science Olympiad participation.',time:'School',money:'₹0–10K coaching'},
+          {phase:'Entrance',title:'IIT JAM / CUET / JEE',desc:'IIT JAM for M.Sc at IITs. JEST/TIFR for Physics. JGEEBILS for bio-sciences.',time:'1–2 yr',money:'₹10K–40K test series'},
+          {phase:'College',title:'B.Sc + M.Sc / Integrated',desc:'IISc, IIT, TIFR, NIT integrated programs. Research publications from year 2.',time:'5 yr',money:'₹50K–2L/yr'},
+          {phase:'Research',title:'PhD / Post-Doc',desc:'CSIR, DST-INSPIRE fellowship. Publish in international journals. Conference presentations.',time:'4–5 yr',money:'₹25K–35K/mo stipend'},
+          {phase:'First Job',title:'Scientist / Research Fellow',desc:'DRDO, ISRO, BARC, CSIR labs. DBT/DST funded positions.',time:'After PhD',money:'₹6–15 LPA'},
+          {phase:'Growth',title:'Senior Scientist / PI',desc:'Principal Investigator, Set up your own lab. Independent research grants.',time:'5–10 yr',money:'₹12–25 LPA'},
+          {phase:'Advanced',title:'International / Director',desc:'Post-Doc abroad (USA/Europe). Director of research institute or ISRO/DRDO dept.',time:'10–20 yr',money:'₹20–50 LPA+'}
+        ]
+      },
+      'Defence & Armed Forces':{
+        icon:'🪖',sal:'₹6–20 LPA + perks',yrs:2,difficulty:'High',competition:'Very High',
+        jobs:['Indian Army Officer','Indian Air Force Pilot','Indian Navy Officer','CRPF/BSF Officer','Coast Guard','NDA Cadet'],
+        roadmap:[
+          {phase:'Now',title:'Physical Fitness + PCM',desc:'Start physical training now — 1.6km run, pull-ups, push-ups. PCM 60%+ for NDA.',time:'School',money:'₹0–5K coaching'},
+          {phase:'Entrance',title:'NDA / AFCAT / CDS',desc:'NDA after 12th (both sexes now). CDS after graduation. AFCAT for Air Force.',time:'6–12 mo prep',money:'₹5K–20K coaching'},
+          {phase:'SSB',title:'Services Selection Board',desc:'5-day SSB interview — psychological tests, group tasks, personal interview. Crack it.',time:'5 days',money:'₹0 (govt pays)'},
+          {phase:'Training',title:'NDA / IMA / AFA / INA',desc:'3yr NDA Khadakwasla. 1yr IMA Dehradun. 1yr Air Force Academy Dundigal.',time:'1–3 yr',money:'₹21K/mo stipend NDA'},
+          {phase:'Commission',title:'Commissioned Officer',desc:'Lieutenant → Captain → Major → Colonel → General. Serve 20+ years.',time:'20+ yr',money:'₹56K–2L/mo + perks'},
+          {phase:'Growth',title:'Promotions + Courses',desc:'War College, Staff College, UN Peacekeeping missions, foreign postings.',time:'10–20 yr',money:'₹1–2L/mo + perks'},
+          {phase:'Post-Retirement',title:'Second Career',desc:'NCC Directorate, CRPF/PSU security, corporate sector. Full pension from day 1.',time:'After 20 yr',money:'₹50K–70K/mo pension'}
+        ]
+      },
+      'Entrepreneurship':{
+        icon:'🚀',sal:'₹0–Unlimited',yrs:0,difficulty:'Very High',competition:'Low-Medium',
+        jobs:['Startup Founder','E-commerce Owner','Franchise Owner','Social Entrepreneur','Freelancer','Content Creator'],
+        roadmap:[
+          {phase:'Now',title:'Build Skills & Network',desc:'Learn marketing, finance, coding basics. Talk to 10 customers about a problem you can solve.',time:'Now',money:'₹0'},
+          {phase:'Validation',title:'Test Your Idea',desc:'Build MVP in 30 days. Sell to 5 real customers. Fail fast, iterate.',time:'1–3 mo',money:'₹0–50K'},
+          {phase:'Build',title:'Product + Team',desc:'Co-founder with complementary skills. Apply to NSRCEL IIM-B or T-Hub incubators.',time:'6–12 mo',money:'Depends'},
+          {phase:'Funding',title:'Seed Funding / Bootstrapping',desc:'Angel investors, Startup India Seed Fund (₹20L). Pitch to VC firms.',time:'3–6 mo',money:'₹5L–2Cr seed'},
+          {phase:'Scale',title:'Scale & Hire',desc:'Marketing, operations, product team. Expand to new cities/segments.',time:'1–3 yr',money:'Break-even then profit'},
+          {phase:'Growth',title:'Series A / Pivot',desc:'Series A funding (₹5–50Cr). International expansion. Or profitable bootstrapped business.',time:'2–5 yr',money:'Variable'},
+          {phase:'Exit',title:'IPO / Acquisition / PE',desc:'List on NSE/BSE. Acquisition by larger company. PE buyout. Return to investors.',time:'5–10 yr',money:'₹Crores+'}
+        ]
+      },
+      'Sports & Fitness':{
+        icon:'🏅',sal:'₹3–50 LPA',yrs:5,difficulty:'High',competition:'Very High',
+        jobs:['Professional Athlete','Sports Coach','Physiotherapist','Sports Scientist','Sports Journalist','Fitness Trainer'],
+        roadmap:[
+          {phase:'Now',title:'Training + School Sport',desc:'Join school team. Train daily with a qualified coach. District-level competition.',time:'School',money:'₹0–5K coaching'},
+          {phase:'Junior',title:'State / National Junior',desc:'Qualify for state Ranji/SAI selection. Khelo India Youth Games participation.',time:'14–18 yr',money:'₹0–20K coaching'},
+          {phase:'Academy',title:'SAI / NIS / Patiala',desc:'Sports Authority of India scholarship. NIS Patiala for coaching diploma.',time:'2–4 yr',money:'₹0 (full scholarship)'},
+          {phase:'Senior',title:'Senior National Level',desc:'Senior national team. Asian Games, Commonwealth Games representation.',time:'18–25 yr',money:'₹5K–50K/mo stipend'},
+          {phase:'Sponsorship',title:'Brands + TOPS Scheme',desc:'Target Olympic Podium (TOPS) funding ₹5L+/yr. Sponsorships from corporates.',time:'22–30 yr',money:'₹5L–5Cr/yr'},
+          {phase:'Career',title:'Arjuna / Dronacharya',desc:'National awards. Job reservation for sportspersons in Railways, Army, Police, Banks.',time:'Peak career',money:'₹5–50 LPA'},
+          {phase:'Post-Sport',title:'Coaching / Commentary',desc:'BCCI, SAI coaching jobs. Broadcasting career. Sports management..',time:'Post 30yr',money:'₹5–25 LPA'}
+        ]
+      },
+      'Architecture':{
+        icon:'🏗️',sal:'₹4–30 LPA',yrs:5,difficulty:'High',competition:'Medium',
+        jobs:['Architect','Urban Planner','Interior Architect','Landscape Architect','Restoration Architect','3D Visualiser'],
+        roadmap:[
+          {phase:'Now',title:'Art + PCM Foundation',desc:'Strong drawing skills essential. PCM 50%+ for NATA. Start sketching everything.',time:'School',money:'₹0–5K art classes'},
+          {phase:'Entrance',title:'NATA / JEE Paper 2',desc:'NATA score for top private colleges. JEE Paper 2 for NITs and SPAs.',time:'1 yr prep',money:'₹15K–40K coaching'},
+          {phase:'College',title:'B.Arch — 5 Years',desc:'SPA Delhi, CEPT, NIT Trichy, Chandigarh College of Architecture. Model making, AutoCAD, Revit.',time:'5 yr',money:'₹1–4L/yr'},
+          {phase:'Internship',title:'Firm + Site Experience',desc:'Intern at architecture firms. Construction site exposure mandatory.',time:'During college',money:'₹5K–15K/mo stipend'},
+          {phase:'License',title:'COA Registration',desc:'Register with Council of Architecture after B.Arch. Mandatory for practice.',time:'Post degree',money:'₹5K registration fee'},
+          {phase:'Career',title:'Architecture Firm / Govt',desc:'NBCC, PWD, private firms. Junior Architect starting salary ₹4–8L.',time:'1–5 yr',money:'₹4–12 LPA'},
+          {phase:'Advanced',title:'Own Firm / Sustainability',desc:'Sustainable architecture, smart cities. International practice via RIBA/AIA credentials.',time:'10+ yr',money:'₹15–40 LPA+'}
+        ]
+      },
+      'Agriculture & Environment':{
+        icon:'🌾',sal:'₹4–20 LPA',yrs:4,difficulty:'Medium',competition:'Low',
+        jobs:['Agricultural Officer','Environmental Scientist','Agronomist','NABARD Officer','Forest Officer (IFS)','Agri Entrepreneur'],
+        roadmap:[
+          {phase:'Now',title:'PCB / PCM Foundation',desc:'Score 60%+ in 12th. Biology strong for agri. ICAR schools are best for agri stream.',time:'12th',money:'₹5K–20K coaching'},
+          {phase:'Entrance',title:'ICAR AIEEA / State CET',desc:'ICAR AIEEA for IARI Delhi, Punjab Agri Uni. State agri university entrance exams.',time:'6–12 mo prep',money:'₹5K–20K coaching'},
+          {phase:'College',title:'B.Sc Agriculture 4yr',desc:'IARI, PAU Ludhiana, GBPUAT. Soil science, crop science, agri economics.',time:'4 yr',money:'₹20K–80K/yr'},
+          {phase:'PG',title:'M.Sc / MBA AgriB',desc:'M.Sc Agri ICAR institutions. MBA AgriB at MANAGE Hyderabad. NABARD exam.',time:'2 yr',money:'₹30K–1L/yr'},
+          {phase:'First Job',title:'Agri Officer / NABARD',desc:'State agri department officer. NABARD agriculture development officer exam.',time:'After degree',money:'₹5–10 LPA'},
+          {phase:'Growth',title:'IFS / State Forest',desc:'UPSC IFS exam for Indian Forest Service (IPS-equivalent status). State Forest range officer.',time:'3–5 yr prep',money:'₹8–15 LPA'},
+          {phase:'Advanced',title:'Agri Entrepreneur / FAO',desc:'Startup in agritech, organic farming export. FAO, UNDP international positions.',time:'10+ yr',money:'₹15–40 LPA'}
+        ]
+      },
+      'Social Work & NGO':{
+        icon:'🤝',sal:'₹3–15 LPA',yrs:2,difficulty:'Low-Medium',competition:'Low',
+        jobs:['Social Worker','NGO Manager','Policy Analyst','UNICEF/UN Officer','CSR Manager','Welfare Officer'],
+        roadmap:[
+          {phase:'Now',title:'Volunteer + Any Stream',desc:'Join an NGO as volunteer NOW. Any stream 12th. English fluency very important.',time:'School',money:'₹0'},
+          {phase:'Graduation',title:'BSW / BA Sociology',desc:'BSW (Bachelor of Social Work) from TISS, DU, Jamia. BA Sociology for foundational knowledge.',time:'3 yr',money:'₹15K–60K/yr'},
+          {phase:'PG',title:'MSW / MA Social Work',desc:'MSW from TISS Mumbai (best). 2-year field internship. Specialise in child welfare, disability.',time:'2 yr',money:'₹40K–1.5L/yr'},
+          {phase:'Internship',title:'NGO / Govt Dept',desc:'CRY, Pratham, HelpAge, Smile Foundation. UN Volunteers program. Social audit projects.',time:'During PG',money:'₹8K–15K/mo stipend'},
+          {phase:'First Job',title:'Programme Officer',desc:'NGO Programme Officer ₹3–6L. Govt welfare schemes implementation. UN JPO exam.',time:'After MSW',money:'₹3–8 LPA'},
+          {phase:'Growth',title:'NGO Director / CSR',desc:'Programme Manager, Director of large NGO. Corporate CSR Manager in MNCs.',time:'5–10 yr',money:'₹8–20 LPA'},
+          {phase:'Advanced',title:'UN / Policy Level',desc:'UNICEF, ILO, WHO national officer. Policy advisor to State/Central Govt.',time:'10–15 yr',money:'₹15–40 LPA'}
+        ]
+      }
+    };
+
+    // Streams → career tracks mapping
+    const STREAM_TRACKS = {
+      'sci-pcm': ['Technology & Coding','Engineering','Science & Research','Defence & Armed Forces','Architecture'],
+      'sci-pcb': ['Medicine & Healthcare','Science & Research','Agriculture & Environment'],
+      'sci-pcmb': ['Technology & Coding','Engineering','Medicine & Healthcare','Science & Research'],
+      'com-m': ['Business & Finance','Entrepreneurship'],
+      'com-nm': ['Business & Finance','Media & Journalism','Social Work & NGO'],
+      'arts': ['Government & Civil Services','Law & Justice','Media & Journalism','Teaching & Education','Social Work & NGO'],
+      'voc': ['Engineering','Entrepreneurship'],
+      '10th': ['Technology & Coding','Medicine & Healthcare','Engineering','Government & Civil Services','Business & Finance','Creative Arts & Design'],
+      '8th9th': ['Technology & Coding','Medicine & Healthcare','Engineering','Government & Civil Services','Business & Finance','Creative Arts & Design'],
+      'grad': Object.keys(TRACKS),
+      'postgrad': Object.keys(TRACKS),
+      'working': Object.keys(TRACKS)
+    };
+
+    // Exams per stream
+    const STREAM_EXAMS = {
+      'sci-pcm': [
+        {name:'JEE Main',info:'Engineering entrance — B.Tech NIT/IIT/IIIT',lvl:'nat'},
+        {name:'JEE Advanced',info:'IIT entrance — Top 2.5L JEE Main qualifiers',lvl:'nat'},
+        {name:'BITSAT',info:'BITS Pilani/Goa/Hyderabad entrance',lvl:'nat'},
+        {name:'VITEEE',info:'VIT Vellore/Chennai entrance',lvl:'nat'},
+        {name:'NDA',info:'National Defence Academy — Defence after 12th',lvl:'nat'},
+        {name:'NATA',info:'National Aptitude Test in Architecture',lvl:'nat'},
+      ],
+      'sci-pcb': [
+        {name:'NEET UG',info:'Medical entrance — MBBS/BDS/BAMS all India',lvl:'nat'},
+        {name:'NEET PG',info:'PG Medical — MD/MS specialisation',lvl:'nat'},
+        {name:'AIIMS PG',info:'AIIMS PG for top medical institutions',lvl:'nat'},
+        {name:'JIPMER',info:'Puducherry JIPMER — MBBS exam',lvl:'nat'},
+        {name:'BHU PMT',info:'BHU medical entrance exam',lvl:'st'},
+      ],
+      'sci-pcmb': [
+        {name:'JEE Main',info:'Engineering entrance',lvl:'nat'},
+        {name:'NEET UG',info:'Medical entrance',lvl:'nat'},
+        {name:'BITSAT',info:'BITS Pilani entrance',lvl:'nat'},
+        {name:'KVPY',info:'Kishore Vaigyanik Protsahan Yojana — research scholarship',lvl:'nat'},
+      ],
+      'com-m': [
+        {name:'CAT',info:'IIM MBA entrance — highest-paying management exam',lvl:'nat'},
+        {name:'CUET',info:'Central University entrance for B.Com Hons',lvl:'nat'},
+        {name:'IPMAT',info:'IIM Integrated MBA after 12th (5yr)',lvl:'nat'},
+        {name:'CA Foundation',info:'Chartered Accountancy — ICAI exam',lvl:'nat'},
+        {name:'XAT / SNAP',info:'XLRI, Symbiosis MBA entrance',lvl:'nat'},
+      ],
+      'com-nm': [
+        {name:'CUET',info:'Central university B.Com, BBA, BHM',lvl:'nat'},
+        {name:'IPU CET',info:'Delhi BBA/BCA entrance',lvl:'st'},
+        {name:'SET Symbiosis',info:'Symbiosis BBA entrance',lvl:'nat'},
+        {name:'CLAT',info:'Law — BA LLB 5-year program',lvl:'nat'},
+      ],
+      'arts': [
+        {name:'CLAT',info:'National Law University entrance — 5yr BA LLB',lvl:'nat'},
+        {name:'CUET',info:'BA Hons History/English/Pol.Sci at Central Universities',lvl:'nat'},
+        {name:'IIMC Entrance',info:'Journalism — IIMC Delhi PG Diploma',lvl:'nat'},
+        {name:'NIFT',info:'Fashion Design — NIFT Entrance Test',lvl:'nat'},
+        {name:'AILET',info:'NLU Delhi — All India Law Entrance Test',lvl:'nat'},
+      ],
+      'voc': [
+        {name:'ITI Admission',info:'ITI trade-based admission via state portal',lvl:'st'},
+        {name:'NIMI MCQ',info:'National Instructional Media — ITI theory exam',lvl:'nat'},
+        {name:'Polytechnic CET',info:'State polytechnic diploma entrance',lvl:'st'},
+      ],
+      '10th': [
+        {name:'CUET',info:'Central University UG entrance after 12th',lvl:'nat'},
+        {name:'JEE Main',info:'Engineering entrance (appear after 12th PCM)',lvl:'nat'},
+        {name:'NEET UG',info:'Medical entrance (appear after 12th PCB)',lvl:'nat'},
+        {name:'NTSE',info:'National Talent Search Exam — scholarship from Class 10',lvl:'nat'},
+        {name:'KVPY',info:'Science talent scholarship — research careers',lvl:'nat'},
+      ]
+    };
+    STREAM_EXAMS['8th9th'] = STREAM_EXAMS['10th'];
+
+    // Graduate data
+    const GRAD_DATA = {
+      'B.Tech / B.E. Engineering': { exams:['GATE','CAT','UPSC ESE','GMAT (MBA abroad)','GRE (MS abroad)','Amazon/Google on-campus'], firms:['Google','Microsoft','Amazon','Infosys','TCS','Wipro','L&T Technology','ONGC via GATE'] },
+      'B.Com / BBA Commerce': { exams:['CAT/XAT (MBA)','GMAT','ACCA','CMA USA','RBI Grade B','SBI PO','SEBI Grade A'], firms:['Deloitte','PwC','EY','KPMG','Goldman Sachs','Axis Bank','HDFC','Reliance'] },
+      'BA Arts / Humanities': { exams:['UPSC CSE','State PCS','UGC NET','CLAT PG (LLM)','IIMC PG Journalism'], firms:['Govt Depts','UNDP','CRY','Pratham','The Hindu','NDTV','PRS Legislative'] },
+      'B.Sc Science': { exams:['IIT JAM','JEST','TIFR','CSIR NET JRF','BARC OCES','ISRO Scientist'], firms:['DRDO','ISRO','BARC','CSIR Labs','Biocon','Dr. Reddys','Sun Pharma'] },
+      'MBBS / BDS / Medical': { exams:['NEET PG','USMLE Step 1 (USA)','PLAB (UK)','INI-CET','FMGE'], firms:['AIIMS','Fortis','Apollo','Medanta','Narayana Health','WHO','MSF'] },
+      'LLB / BA LLB Law': { exams:['AIBE','CLAT PG LLM','Judiciary Exam','UPSC','Bar Exam USA (LLM)'], firms:['AZB & Partners','Cyril Amarchand','Shardul Amarchand','Khaitan & Co','Trilegal','DLA Piper'] },
+      'BCA / MCA IT': { exams:['GATE CS','NIMCET','TCS NQT','Infosys InfyTQ','AWS Certifications'], firms:['TCS','Infosys','Wipro','HCL','Accenture','IBM','Capgemini'] },
+      'B.Des / BFA Design': { exams:['NID PG DAT','CEED (IIT)','NIFT PG','Behance Portfolio Review'], firms:['IDEO','Zomato Design','Flipkart Design','Adobe','boAt','Nykaa Brand','Razorpay'] },
+      'MBA / PGDM': { exams:['GMAT (Global MBA)','CFA Level 1','PMI PMP','GRE','SEBI Grade A'], firms:['McKinsey','BCG','Bain','Goldman','P&G','HUL','Asian Paints','Nestlé'] },
+      'B.Ed / Teaching': { exams:['CTET','DSSSB','KVS PRT/TGT/PGT','UGC NET','NVS'], firms:['KVS','NVS','DPS Group','Amity Schools','BYJU\'S','Unacademy'] },
+      'B.Pharm / Pharmacy': { exams:['GPAT','NIPER JEE','State Drug Inspector','USMLE Pharmacy (USA)'], firms:['Sun Pharma','Dr. Reddys','Cipla','Biocon','Lupin','DRL','Glenmark'] },
+      'Other / Diploma': { exams:['State-specific technical exams','CUET PG','Relevant professional certifications'], firms:['Depends on specialisation — ask AI for specific guidance'] }
+    };
+
+    // Post-grad & working data
+    const PG_DATA = {
+      'M.Tech / ME Engineering': GRAD_DATA['B.Tech / B.E. Engineering'],
+      'MBA / PGDM Management': GRAD_DATA['MBA / PGDM'],
+      'MD / MS Medicine': { exams:['NEET SS','DM/MCh exams','USMLE Step 3','PLAB 2 (UK)'], firms:['AIIMS','Medanta','Apollo','WHO','Max Healthcare'] },
+      'M.Sc Science': { exams:['CSIR NET JRF','JEST','BARC DGFS','IIT Research Position'], firms:['DRDO','ISRO','CSIR','Biocon','ICMR','ThermoFisher'] },
+      'MA Arts Humanities': GRAD_DATA['BA Arts / Humanities'],
+      'LLM Law': { exams:['Judiciary (HJS/HCS)','SCI Law Clerk','Bar Exam (USA)','NLSIU LLM'], firms:['Supreme Court Chambers','Cyril Amarchand','WilmerHale','Clifford Chance'] },
+      'MCA IT': GRAD_DATA['BCA / MCA IT'],
+      'Other PG': { exams:['Relevant professional exam for your field'], firms:['Industry-specific — use AI guidance'] }
+    };
+
+    const WORK_DATA = {
+      'IT / Software Professional': { exams:['AWS/GCP/Azure Cert','PMP','TOGAF','Scrum Master','CKA Kubernetes'], firms:['Google','Microsoft','Amazon','Atlassian','Adobe','Freshworks','CRED'] },
+      'Banking / Finance Professional': { exams:['JAIIB','CAIIB','CFA Levels','FRM','CPA USA','CMA'], firms:['Goldman Sachs','JPMorgan','HDFC Pvt Banking','SEBI','RBI Grade B'] },
+      'Government / PSU Employee': { exams:['UPSC CSE (IAS)','UPSC CDS','IES','State Higher Judiciary','CAPF AC'], firms:['State Cadre','Central Secretariat','IAS Training','IRS'] },
+      'Healthcare / Medical Professional': { exams:['NEET PG','USMLE','PLAB','DNB','DM/MCh Superspecialty'], firms:['Apollo Global','Medanta','AIIMS','WHO','Narayana Health'] },
+      'Teaching / Academic': { exams:['UGC NET JRF','CTET','DSSSB PGT','UPSC IES (Economics)'], firms:['IIT/IIM as RA','DU/JMI/BHU Faculty','BYJU\'S','Vedantu'] },
+      'Sales / Marketing': { exams:['MBA CAT/GMAT','Google Ads Cert','HubSpot Marketing','Digital Marketing Pro'], firms:['HUL','P&G','ITC','Amazon Seller','Nykaa','Meesho'] },
+      'Self-employed / Business': { exams:['CA Final','Company Secretary','IICA Certification','GST Practitioner'], firms:['Startup India Portal','SIDBI Loan','NSIC MSME','Udyam Registration'] },
+      'Other Domain': { exams:['UPSC CSE','CAT MBA','GATE relevant branch','PMP Project Mgmt'], firms:['Industry-specific — AI will guide based on your career interest'] }
+    };
+
+    // Income hints
+    const INCOME_HINTS = {
+      low: { cls:'inc-low', msg:'💚 Great news — you likely qualify for NSP, Post-Matric Scholarship, and free/subsidised seats at govt colleges. We\'ll highlight free & low-cost paths.' },
+      mid: { cls:'inc-mid', msg:'🟡 Vidya Lakshmi education loan portal (up to ₹6.5L without collateral), state merit scholarships, and many PM Scholarship schemes are available for you.' },
+      high: { cls:'inc-high', msg:'💜 Premium institution options, study abroad (IIM/Wharton/INSEAD), and specialised professional certifications will be highlighted for your profile.' }
+    };
+
+    // ─────────────────────────────────
+    // CHIP TOGGLE
+    // ─────────────────────────────────
+    function tog(el) { el.classList.toggle('selected'); }
+
+    // ─────────────────────────────────
+    // CLASS CHANGE HANDLER
+    // ─────────────────────────────────
+    function onClass(val) {
+      S.cls = val;
+      S.subjects = [];
+      S.gradStream = '';
+
+      // Hide all subject panels
+      ['st-empty','st-10th','st-sci-pcm','st-sci-pcb','st-sci-pcmb','st-com-m','st-com-nm','st-arts','st-voc','st-grad','st-postgrad','st-working']
+        .forEach(id => { const e = document.getElementById(id); if(e) e.classList.add('hidden'); });
+
+      // Reset chips
+      document.querySelectorAll('#subj-card .chip').forEach(c => c.classList.remove('selected'));
+      document.querySelectorAll('.stream-card').forEach(c => c.classList.remove('picked'));
+
+      const panelMap = { '8th9th':'st-10th', '10th':'st-10th', 'sci-pcm':'st-sci-pcm', 'sci-pcb':'st-sci-pcb', 'sci-pcmb':'st-sci-pcmb', 'com-m':'st-com-m', 'com-nm':'st-com-nm', 'arts':'st-arts', 'voc':'st-voc', 'grad':'st-grad', 'postgrad':'st-postgrad', 'working':'st-working' };
+
+      if(panelMap[val]) {
+        const panel = document.getElementById(panelMap[val]);
+        if(panel) panel.classList.remove('hidden');
+      } else {
+        document.getElementById('st-empty').classList.remove('hidden');
+      }
+
+      updateStreamBanner(val);
+      buildExplorer(val);
+    }
+
+    // ─────────────────────────────────
+    // STREAM BANNER
+    // ─────────────────────────────────
+    function updateStreamBanner(val) {
+      const b = document.getElementById('stream-banner');
+      if(!val) { b.style.display='none'; return; }
+
+      const banners = {
+        'sci-pcm':'sci',  'sci-pcmb':'sci', 'sci-pcb':'bio',
+        'com-m':'com', 'com-nm':'com',
+        'arts':'arts',
+        'voc':'gen', '8th9th':'gen', '10th':'gen',
+        'grad':'gen', 'postgrad':'gen', 'working':'gen'
+      };
+
+      const msgs = {
+        'sci-pcm':'⚡ PCM stream unlocks Engineering (JEE), Architecture (NATA), Defence (NDA), Merchant Navy, and all tech paths.',
+        'sci-pcb':'🌿 PCB stream unlocks Medicine (NEET), Pharmacy, Biotechnology, Agriculture, Nursing, Physiotherapy.',
+        'sci-pcmb':'🔬 PCMB gives you maximum flexibility — both JEE (Engineering) and NEET (Medicine) paths are open.',
+        'com-m':'📊 Commerce + Maths opens CA, MBA (CAT/IIM), CFA, Investment Banking — highest earning commerce paths.',
+        'com-nm':'💼 Commerce without Maths: BBA, B.Com, Hotel Management, Fashion, HR, Marketing are excellent paths.',
+        'arts':'📖 Arts/Humanities: UPSC/IAS, Law (CLAT), Journalism, Psychology, Design — unlimited, underrated paths.',
+        'voc':'🔧 Vocational + NSDC Certification opens technical employment and entrepreneurship. Lateral entry to B.Tech possible.',
+        '8th9th':'🎒 You have time to explore! Focus on building fundamentals across Science, Maths, and English.',
+        '10th':'🎓 Key decision ahead — choose your stream wisely based on interests, not just marks.',
+        'grad':'🎓 Graduate-level guidance: we\'ll focus on exams, companies, and higher studies relevant to your degree.',
+        'postgrad':'🏛️ Post-Graduate guidance: advanced exams, research, and senior-level career options.',
+        'working':'💼 Working Professional: we\'ll focus on upskilling, career switching, and advancement strategies.'
+      };
+
+      const cls = banners[val] || 'gen';
+      b.className = `banner ${cls}`;
+      b.textContent = msgs[val] || '';
+      b.style.display = msgs[val] ? 'block' : 'none';
+    }
+
+    // ─────────────────────────────────
+    // STREAM CARD PICK
+    // ─────────────────────────────────
+    function pickStream(el) {
+      document.querySelectorAll('.stream-card').forEach(c => c.classList.remove('picked'));
+      el.classList.add('picked');
+      S.gradStream = el.dataset.v;
+
+      // Show relevant exams/firms if grad data exists
+      const card = document.getElementById('explore-card');
+      const dataSource = S.cls === 'postgrad' ? PG_DATA : S.cls === 'working' ? WORK_DATA : GRAD_DATA;
+      const d = dataSource[S.gradStream];
+      if(d) {
+        card.style.display='block';
+        document.getElementById('ttab-row').innerHTML = '';
+        document.getElementById('tpanel-wrap').innerHTML = `
+          <div class="section-label" style="margin-bottom:10px">📝 Key Exams for ${S.gradStream}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:16px">
+            ${d.exams.map(e=>`<div class="gchip exam">📝 ${e}</div>`).join('')}
+          </div>
+          <div class="section-label" style="margin-bottom:10px">🏢 Target Companies / Employers</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">
+            ${d.firms.map(f=>`<div class="gchip firm">🏢 ${f}</div>`).join('')}
+          </div>`;
+      }
+    }
+
+    // ─────────────────────────────────
+    // CAREER EXPLORER (stream tabs)
+    // ─────────────────────────────────
+    function buildExplorer(val) {
+      const card = document.getElementById('explore-card');
+      if(!val || IS_COLLEGE(val)) { card.style.display='none'; return; }
+
+      const tracks = STREAM_TRACKS[val] || [];
+      if(!tracks.length) { card.style.display='none'; return; }
+
+      card.style.display='block';
+      const tabRow = document.getElementById('ttab-row');
+      const panelWrap = document.getElementById('tpanel-wrap');
+      tabRow.innerHTML = '';
+      panelWrap.innerHTML = '';
+
+      tracks.forEach((key, i) => {
+        const t = TRACKS[key]; if(!t) return;
+        const tab = document.createElement('div');
+        tab.className = 'ttab' + (i===0?' active':'');
+        tab.textContent = t.icon + ' ' + key;
+        tab.onclick = () => { document.querySelectorAll('.ttab').forEach(x=>x.classList.remove('active')); tab.classList.add('active'); document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('active')); document.getElementById('tp-'+i).classList.add('active'); };
+        tabRow.appendChild(tab);
+
+        const rmHtml = t.roadmap.slice(0,5).map((s,si) => `
+          <div class="trm-item" data-n="${si+1}">
+            <div class="trm-phase">${s.phase}</div>
+            <div class="trm-title">${s.title}</div>
+            <div class="trm-desc">${s.desc}</div>
+            <div class="trm-money">💰 ${s.money}</div>
+          </div>`).join('');
+
+        const jobsHtml = t.jobs.slice(0,5).map(j=>`<span class="gchip firm">✦ ${j}</span>`).join('');
+        const panel = document.createElement('div');
+        panel.className = 'tpanel' + (i===0?' active':'');
+        panel.id = 'tp-'+i;
+        panel.innerHTML = `
+          <div class="track">
+            <div class="track-head">
+              <div class="track-ico">${t.icon}</div>
+              <div><div class="track-title">${key}</div></div>
+              <div class="track-sal">${t.sal}</div>
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Years to first job: <strong style="color:var(--accent4)">${t.yrs} yrs</strong> · Competition: <strong style="color:var(--accent4)">${t.competition}</strong></div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">${jobsHtml}</div>
+            <div class="section-label" style="font-size:10px">Roadmap Overview</div>
+            <div class="trm">${rmHtml}</div>
+            <button class="btn btn-ghost" style="margin-top:10px;font-size:12px;width:100%" onclick="addToCompare('${key}')">⊕ Add to Comparison</button>
+          </div>`;
+        panelWrap.appendChild(panel);
+      });
+
+      // Show exams for this stream
+      const exams = STREAM_EXAMS[val] || [];
+      if(exams.length) {
+        const examDiv = document.createElement('div');
+        examDiv.innerHTML = `
+          <div class="section-label" style="margin-top:16px;margin-bottom:10px">📝 Key Entrance Exams for Your Stream</div>
+          ${exams.map(e=>`<div class="exam-item">
+            <div><div class="exam-name">${e.name}</div><div class="exam-info">${e.info}</div></div>
+            <div class="exam-badge badge-${e.lvl}">${e.lvl==='nat'?'National':e.lvl==='st'?'State':'Intl'}</div>
+          </div>`).join('')}`;
+        panelWrap.appendChild(examDiv);
+      }
+    }
+
+    // ─────────────────────────────────
+    // COMPARE LOGIC
+    // ─────────────────────────────────
+    const compareSet = new Set();
+
+    function addToCompare(key) {
+      compareSet.add(key);
+      if(compareSet.size < 2) { alert(`Added! Select one more career to compare.`); return; }
+      buildCompareTable([...compareSet]);
+    }
+
+    function buildCompareTable(sel) {
+      const card = document.getElementById('compare-card');
+      card.style.display = 'block';
+      const rows = [
+        {label:'Salary Range', fmt:k=>TRACKS[k].sal},
+        {label:'Years to Job', fmt:k=>TRACKS[k].yrs+'  yrs'},
+        {label:'Competition', fmt:k=>TRACKS[k].competition},
+        {label:'Starting Pay', fmt:k=>TRACKS[k].roadmap[4]?.money||'—'},
+        {label:'After 5 Yrs', fmt:k=>TRACKS[k].roadmap[5]?.money||'—'},
+        {label:'After 10 Yrs', fmt:k=>TRACKS[k].roadmap[6]?.money||'—'},
+        {label:'Training Cost', fmt:k=>TRACKS[k].roadmap[2]?.money||'—'},
+        {label:'Key Exam/Step', fmt:k=>TRACKS[k].roadmap[1]?.title||'—'},
+        {label:'Top 3 Jobs', fmt:k=>TRACKS[k].jobs.slice(0,3).join(', ')},
+      ];
+      const headers = sel.map(k=>`<th>${TRACKS[k].icon} ${k}</th>`).join('');
+      const body = rows.map(row=>`<tr><td>${row.label}</td>${sel.map(k=>`<td>${row.fmt(k)}</td>`).join('')}</tr>`).join('');
+      document.getElementById('compare-body').innerHTML = `
+        <div style="overflow-x:auto">
+          <table class="cmp-table"><thead><tr><th>Factor</th>${headers}</tr></thead><tbody>${body}</tbody></table>
+        </div>
+        <div class="hint hint-orange" style="margin-top:12px;font-size:13px">💡 Use this to weigh <strong>time investment, cost, competition, and earning potential</strong>. Every path is valid — choose based on passion AND practicality.</div>`;
+      document.getElementById('compare-card').scrollIntoView({behavior:'smooth'});
+    }
+
+    function hideCompare() { document.getElementById('compare-card').style.display='none'; compareSet.clear(); }
+
+    // ─────────────────────────────────
+    // INCOME HANDLER
+    // ─────────────────────────────────
+    function onIncome(val) {
+      S.income = val;
+      const hint = document.getElementById('income-hint');
+      if(!val || !INCOME_HINTS[val]) { hint.style.display='none'; return; }
+      const h = INCOME_HINTS[val];
+      hint.className = h.cls;
+      hint.textContent = h.msg;
+      hint.style.display = 'block';
+    }
+
+    // ─────────────────────────────────
+    // NAVIGATION
+    // ─────────────────────────────────
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    function goToStep2() {
+      S.name = document.getElementById('inp-name').value.trim();
+      S.cls = document.getElementById('inp-class').value;
+      S.pct = document.getElementById('inp-pct').value;
+      S.income = document.getElementById('inp-income').value;
+      S.city = document.getElementById('inp-city').value.trim();
+      S.lang = document.getElementById('inp-lang').value;
+      S.subjects = [...document.querySelectorAll('#subj-card .chip.selected')].map(e=>e.dataset.v);
+
+      if(!S.name) { alert('Please enter your name!'); return; }
+      if(!S.cls) { alert('Please select your class/level!'); return; }
+
+      showScreen('s2');
+      document.getElementById('prog').style.width='60%';
+    }
+
+    function back1() { showScreen('s1'); document.getElementById('prog').style.width='25%'; }
+
+    function restart() {
+      S.name=''; S.cls=''; S.pct=''; S.income=''; S.city=''; S.lang='English';
+      S.subjects=[]; S.gradStream=''; S.interests=[]; S.values=[]; S.free='';
+      compareSet.clear();
+
+      ['inp-name','inp-city','inp-free'].forEach(id=>{const e=document.getElementById(id); if(e) e.value='';});
+      ['inp-class','inp-pct','inp-income','inp-lang'].forEach(id=>{const e=document.getElementById(id); if(e) e.value='';});
+
+      document.getElementById('income-hint').style.display='none';
+      document.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+      document.querySelectorAll('.stream-card').forEach(c=>c.classList.remove('picked'));
+      document.getElementById('stream-banner').style.display='none';
+      document.getElementById('explore-card').style.display='none';
+      document.getElementById('compare-card').style.display='none';
+
+      ['st-empty','st-10th','st-sci-pcm','st-sci-pcb','st-sci-pcmb','st-com-m','st-com-nm','st-arts','st-voc','st-grad','st-postgrad','st-working']
+        .forEach(id=>{ const e=document.getElementById(id); if(e) e.classList.add('hidden'); });
+      document.getElementById('st-empty').classList.remove('hidden');
+      document.getElementById('results').innerHTML='';
+
+      showScreen('s1');
+      document.getElementById('prog').style.width='25%';
+    }
+
+    // ─────────────────────────────────
+    // GENERATE — Claude API
+    // ─────────────────────────────────
+    async function generate() {
+      S.interests = [...document.querySelectorAll('#s2 .chip.selected')].map(e=>e.dataset.v).filter(v=>TRACKS[v]);
+      S.values = [...document.querySelectorAll('#s2 .chip.selected')].map(e=>e.dataset.v).filter(v=>!TRACKS[v]);
+      S.free = document.getElementById('inp-free').value.trim();
+
+      if(!S.interests.length) { alert('Please select at least one career interest!'); return; }
+
+      showScreen('s3');
+      document.getElementById('prog').style.width='85%';
+
+      const msgs = ['Analysing profile…','Matching career paths…','Finding entrance exams…','Building roadmaps…','Checking scholarships…','Finalising your plan…'];
+      let mi=0;
+      const iv = setInterval(()=>{ mi=(mi+1)%msgs.length; document.getElementById('load-msg').textContent=msgs[mi]; }, 1600);
+
+      const isCollege = IS_COLLEGE(S.cls);
+      const subjectLine = isCollege ? `Degree/Field: ${S.gradStream}` : `Subjects: ${S.subjects.join(', ')||'Not specified'}`;
+
+      const prompt = `You are an expert career counsellor for Indian students. Provide comprehensive, practical, India-specific guidance.
+
+STUDENT PROFILE:
+- Name: ${S.name}
+- Level: ${S.cls} ${isCollege?'(GRADUATE LEVEL — focus on what they can do NOW, NOT school-level advice)':''}
+- Marks: ${S.pct}
+- Income: ${S.income||'Not specified'} ${S.income==='low'?'(Strongly emphasise free/low-cost paths and scholarships)':S.income==='mid'?'(Mention Vidya Lakshmi education loans and merit scholarships)':''}
+- ${subjectLine}
+- Career Interests: ${S.interests.join(', ')}
+- Work Values: ${S.values.join(', ')||'Not specified'}
+- City: ${S.city||'India'}
+- Dream / Additional Info: ${S.free||'Not specified'}
+
+IMPORTANT RULES:
+1. For GRADUATE level (grad/postgrad/working): Focus ONLY on exams they can appear for NOW, companies hiring NOW, and next career steps. Do NOT give 12th/school-level advice.
+2. For SCHOOL level (10th/12th): Give complete roadmap from current stage to career.
+3. For MULTIPLE interests (${S.interests.join(', ')}): Give a SEPARATE section for EACH interest — do NOT repeat content.
+4. Income ${S.income}: ${S.income==='low'?'Strongly emphasise scholarships.gov.in, NSP, Post-Matric, Pragati, and free/affordable paths':S.income==='mid'?'Mention Vidya Lakshmi education loans and state merit scholarships':S.income==='high'?'Suggest premium institutions and study abroad options':''}
+
+Write with EXACTLY these bold headings:
+
+**BEST FIT PATH**
+${isCollege?'Which career field suits this student best given their graduate background. What they should do in the next 3–6 months.':'Best stream/path for this student with clear reasoning.'}
+
+**CAREER ANALYSIS — ${S.interests.map((v,i)=>`${i+1}. ${v}`).join(' | ')}**
+For EACH interest separately: why it fits, India salary range, top 3 skills needed, specific colleges/companies to target.
+
+**${isCollege?'EXAMS & DIRECT APPLICATIONS':'ENTRANCE EXAMS & STRATEGY'}**
+${isCollege?'Specific govt exams (with months), direct application portals for private companies, and professional certifications for this graduate level student.':'Key exams with target scores, exam months, and official websites.'}
+
+**ROADMAPS — ${S.interests.join(' | ')}**
+${isCollege?'For each interest, give 4 actionable steps the graduate can take NOW (not school-level steps).':'For EACH interest separately (do NOT repeat), give a 5-step roadmap with timeline and cost/investment at each step.'}
+
+**SCHOLARSHIPS & FINANCIAL SUPPORT**
+3–4 specific scholarships or schemes for income level "${S.income||'general'}". Include eligibility, amount, and apply link.
+
+**MESSAGE FOR ${S.name.toUpperCase()}**
+Personal, warm, one paragraph directly addressing this student by name about their specific combination of interests and situation.
+
+Be very specific: mention real exam names, company names, salary figures, college names, application links.`;
+
+      let aiText = '';
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 3000,
+            messages: [{ role: 'user', content: prompt }]
+          })
+        });
+        const data = await res.json();
+        if(data.content && data.content[0] && data.content[0].text) {
+          aiText = data.content[0].text;
+        }
+      } catch(e) { console.log('Claude API error:', e); }
+
+      clearInterval(iv);
+      showResults(aiText);
+    }
+
+    // ─────────────────────────────────
+    // RESULTS
+    // ─────────────────────────────────
+    function showResults(aiText) {
+      showScreen('s4');
+      document.getElementById('prog').style.width='100%';
+
+      const emoji = TRACKS[S.interests[0]]?.icon || '🎯';
+      const container = document.getElementById('results');
+
+      // Hero
+      container.innerHTML = `<div class="result-hero">
+        <div class="big">${emoji}</div>
+        <h2>${S.name}'s Career Plan</h2>
+        <p>${S.interests.length} career path${S.interests.length>1?'s':''} analysed · Personalised AI guidance</p>
+      </div>`;
+
+      // Scholarship fast-access for low/mid income
+      if(S.income==='low'||S.income==='mid') {
+        const h = INCOME_HINTS[S.income];
+        container.innerHTML += `<div class="card" style="border-left:4px solid var(--accent3)">
+          <div class="section-label">🏆 Scholarships Available for You</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.85">${h.msg}</div>
+          <div style="margin-top:12px"><a href="https://scholarships.gov.in" target="_blank" style="color:var(--accent);font-size:13px;font-weight:700;text-decoration:none">🔗 Apply at scholarships.gov.in →</a></div>
+        </div>`;
+      }
+
+      // AI sections
+      if(aiText && aiText.length>100) {
+        const sections = [
+          {key:'BEST FIT PATH', icon:'🎓', title:'Best Fit Path & Strategy'},
+          {key:'CAREER ANALYSIS', icon:'🚀', title:'Career Analysis — Your Selected Paths'},
+          {key:'EXAMS & DIRECT APPLICATIONS', icon:'📝', title:'Exams & Applications'},
+          {key:'ENTRANCE EXAMS & STRATEGY', icon:'📝', title:'Entrance Exams & Strategy'},
+          {key:'ROADMAPS', icon:'🗺️', title:'Roadmaps for Each Career'},
+          {key:'SCHOLARSHIPS & FINANCIAL SUPPORT', icon:'🏆', title:'Scholarships & Financial Help'},
+          {key:'MESSAGE FOR', icon:'💪', title:'A Personal Message'},
+        ];
+
+        let html='';
+        sections.forEach((sec,i) => {
+          const start = aiText.indexOf(`**${sec.key}`);
+          if(start===-1) return;
+          const headEnd = aiText.indexOf('**', start+2);
+          if(headEnd===-1) return;
+          const nextSection = sections.slice(i+1).map(s=>`**${s.key}`).find(m=>aiText.indexOf(m, headEnd+1)!==-1);
+          const end = nextSection ? aiText.indexOf(nextSection, headEnd+1) : aiText.length;
+          const content = aiText.slice(headEnd+2, end===-1?aiText.length:end).trim();
+          if(!content) return;
+          html += `<div class="card" style="animation-delay:${i*0.06}s">
+            <div class="section-label">${sec.icon} ${sec.title}</div>
+            <div style="font-size:13px;line-height:1.9;color:var(--muted)">${fmtAI(content)}</div>
+          </div>`;
+        });
+
+        if(!html) html=`<div class="card"><div class="section-label">🤖 Your Career Plan</div><div style="font-size:13px;line-height:1.9;color:var(--muted)">${fmtAI(aiText)}</div></div>`;
+        container.innerHTML += html;
+      } else {
+        container.innerHTML += buildLocal();
+      }
+
+      // Built-in roadmaps (school level only)
+      if(S.interests.length && !IS_COLLEGE(S.cls)) {
+        const uniqueInterests=[...new Set(S.interests)];
+        let allRM = uniqueInterests.map(key=>{
+          const t=TRACKS[key]; if(!t) return '';
+          const rmHtml = t.roadmap.map((step,si)=>`
+            <div class="rm-item" data-n="${si+1}">
+              <div class="rm-phase">${step.phase} · ${step.time}</div>
+              <div class="rm-title">${step.title}</div>
+              <div class="rm-desc">${step.desc}</div>
+              <div class="rm-time">💰 ${step.money}</div>
+            </div>`).join('');
+          return `<div style="margin-bottom:28px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:12px 16px;background:var(--surface2);border-radius:12px">
+              <span style="font-size:24px">${t.icon}</span>
+              <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700">${key}</div>
+              <div style="margin-left:auto;font-size:12px;font-weight:700;color:var(--accent3)">${t.sal}</div>
+            </div>
+            <div class="roadmap">${rmHtml}</div>
+          </div>`;
+        }).join('<hr style="border:none;border-top:1px solid var(--border);margin:20px 0">');
+
+        container.innerHTML += `<div class="card">
+          <div class="section-label">🗺️ Step-by-Step Roadmap (Time + Cost at Every Step)</div>
+          ${allRM}
+        </div>`;
+      }
+
+      // Comparison table (2+ interests)
+      if(S.interests.length>=2) {
+        container.innerHTML += `<div class="card" id="res-cmp-wrap">
+          <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="toggleResCompare()">⚖️ Compare All ${S.interests.length} Careers — Time, Money & Work</button>
+          <div id="res-cmp-table" style="display:none;margin-top:16px">${buildCmpTable([...new Set(S.interests)])}</div>
+        </div>`;
+      }
+    }
+
+    function toggleResCompare() {
+      const t=document.getElementById('res-cmp-table');
+      if(!t) return;
+      t.style.display = t.style.display==='none'?'block':'none';
+      const btn=t.previousElementSibling;
+      if(btn) btn.textContent = t.style.display==='none'
+        ?`⚖️ Compare All ${S.interests.length} Careers — Time, Money & Work`
+        :'✕ Hide Comparison';
+    }
+
+    function buildCmpTable(sel) {
+      const rows=[
+        {label:'Salary Range', fmt:k=>TRACKS[k].sal},
+        {label:'Years to Job', fmt:k=>TRACKS[k].yrs+' yrs'},
+        {label:'Competition', fmt:k=>TRACKS[k].competition},
+        {label:'Starting Pay', fmt:k=>TRACKS[k].roadmap[4]?.money||'—'},
+        {label:'After 5 Years', fmt:k=>TRACKS[k].roadmap[5]?.money||'—'},
+        {label:'After 10 Yrs', fmt:k=>TRACKS[k].roadmap[6]?.money||'—'},
+        {label:'Training Cost', fmt:k=>TRACKS[k].roadmap[2]?.money||'—'},
+        {label:'Key Exam/Step', fmt:k=>TRACKS[k].roadmap[1]?.title||'—'},
+        {label:'Top 3 Jobs', fmt:k=>TRACKS[k].jobs.slice(0,3).join(', ')},
+      ];
+      const headers=sel.map(k=>`<th>${TRACKS[k].icon} ${k}</th>`).join('');
+      const body=rows.map(row=>`<tr><td>${row.label}</td>${sel.map(k=>`<td>${row.fmt(k)}</td>`).join('')}</tr>`).join('');
+      return `<div style="overflow-x:auto"><table class="cmp-table">
+        <thead><tr><th>Factor</th>${headers}</tr></thead>
+        <tbody>${body}</tbody>
+      </table></div>
+      <div class="hint hint-orange" style="margin-top:12px">💡 Weigh <strong>time investment, cost, competition, and earning potential</strong>. Every career is valid — choose what matches your passion AND your practical situation.</div>`;
+    }
+
+    function fmtAI(text) {
+      return text
+        .replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--text)">$1</strong>')
+        .replace(/\*(.*?)\*/g,'<em>$1</em>')
+        .replace(/^- (.+)/gm,'<div style="padding:3px 0 3px 14px;border-left:2px solid var(--accent);margin:3px 0">• $1</div>')
+        .replace(/^\d+\. (.+)/gm,'<div style="padding:3px 0">$&</div>')
+        .replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+    }
+
+    function buildLocal() {
+      const int = S.interests[0] || 'Technology & Coding';
+      const t = TRACKS[int] || TRACKS['Technology & Coding'];
+      const isCollege = IS_COLLEGE(S.cls);
+
+      let html=`<div class="card">
+        <div class="insight">
+          <h4>🎓 Best Match: ${int}</h4>
+          <p>Salary: <strong>${t.sal}</strong> · Competition: <strong>${t.competition}</strong> · Duration: <strong>${t.yrs} years to first job</strong></p>
+          <div class="tag-row" style="margin-top:10px">${t.jobs.map(j=>`<span class="tag">${j}</span>`).join('')}</div>
+        </div>
+      </div>`;
+
+      if(isCollege && S.gradStream) {
+        const dataSource = S.cls==='postgrad'?PG_DATA:S.cls==='working'?WORK_DATA:GRAD_DATA;
+        const d=dataSource[S.gradStream];
+        if(d) html+=`<div class="card">
+          <div class="section-label">📝 Govt Exams & Top Companies for ${S.gradStream}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:14px">${d.exams.map(e=>`<div class="gchip exam">📝 ${e}</div>`).join('')}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">${d.firms.map(f=>`<div class="gchip firm">🏢 ${f}</div>`).join('')}</div>
+        </div>`;
+      }
+
+      html+=`<div class="card"><div class="hint hint-orange">
+        💡 <strong>AI guidance unavailable</strong> — Claude API requires a valid API key. The roadmaps and career data above are from our built-in database. Set your API key in the code to get personalised AI analysis with college names, target scores, and custom advice.
+      </div></div>`;
+      return html;
+    }
+  </script>
+
+</body>
+</html>
